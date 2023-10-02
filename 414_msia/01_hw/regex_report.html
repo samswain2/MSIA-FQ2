@@ -1,0 +1,51 @@
+
+<html>
+<head>
+    <title>Regular Expression Report</title>
+</head>
+<body>
+    <h1>Regular Expression Report</h1>
+    <h2>Python Code and Regular Expression</h2>
+    <pre>
+    import re
+
+    # Given text
+    text = "The quick brown fox jumps over the lazy dog. The cat is on the mat. Theology is the study of religious belief. 
+    Other animals also inhabit the forest. The_quick_brown_dog chases its tail. The25 students attended the lecture. 
+    There are many theories about the origin of the universe. The sun shines brightly in the sky. The_quick_brown_fox 
+    is a popular phrase. The end of the story is unexpected. The weather is getting colder. The_1234 project deadline 
+    is approaching. There is no doubt that the event will be a success. The team celebrated their victory. 
+    The_quick_brown_fox is known for its speed. The123 students scored well in the exam. The_quick_brown_dog is friendly. 
+    The_25th anniversary of the school is approaching. The beginning of the book is captivating. The result was beyond 
+    their expectations. The_theory needs further investigation."
+
+    # Regular expression to find 'the' as a whole word and case-insensitive
+    regex = re.compile(r'\b(the)\b', re.IGNORECASE)
+
+    # Find all matches
+    matches = regex.findall(text)
+
+    # Count the number of matches
+    match_count = len(matches)
+
+    # Highlight all matches by making them bold
+    highlighted_text = regex.sub(r'<b>\1</b>', text)
+    </pre>
+    
+    <h2>List of Matches</h2>
+    <p>['The', 'the', 'The', 'the', 'the', 'the', 'the', 'the', 'the', 'The', 'the', 'The', 'the', 'The', 'the', 'The', 'the', 'the', 'The', 'the', 'The']</p>
+    
+    <h2>Count of Matches</h2>
+    <p>21</p>
+    
+    <h2>Highlighted Text</h2>
+    <p><b>The</b> quick brown fox jumps over <b>the</b> lazy dog. <b>The</b> cat is on <b>the</b> mat. Theology is <b>the</b> study of religious belief. 
+Other animals also inhabit <b>the</b> forest. The_quick_brown_dog chases its tail. The25 students attended <b>the</b> lecture. 
+There are many theories about <b>the</b> origin of <b>the</b> universe. <b>The</b> sun shines brightly in <b>the</b> sky. The_quick_brown_fox 
+is a popular phrase. <b>The</b> end of <b>the</b> story is unexpected. <b>The</b> weather is getting colder. The_1234 project deadline 
+is approaching. There is no doubt that <b>the</b> event will be a success. <b>The</b> team celebrated their victory. 
+The_quick_brown_fox is known for its speed. The123 students scored well in <b>the</b> exam. The_quick_brown_dog is friendly. 
+The_25th anniversary of <b>the</b> school is approaching. <b>The</b> beginning of <b>the</b> book is captivating. <b>The</b> result was beyond 
+their expectations. The_theory needs further investigation.</p>
+</body>
+</html>
