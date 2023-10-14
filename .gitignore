@@ -1,2 +1,9 @@
 # Envs
 .venv
+.venv311
+
+# Credentials
+my_credentials.txt
+
+# Cache
+__pycache__/
