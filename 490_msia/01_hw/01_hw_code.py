@@ -30,8 +30,9 @@ model = tf.keras.Sequential([
 
 def CartPole_RL(model, discount_factor=0.95, num_choices=2):
     episode_rewards = []
+    episode = 0
     
-    for episode in range(2500):
+    while True:
         observation, info = env.reset()
         obs_history, reward_history, action_history = [], [], []
 
@@ -70,17 +71,19 @@ def CartPole_RL(model, discount_factor=0.95, num_choices=2):
         total_reward = sum(reward_history)
         episode_rewards.append(total_reward)
 
-        moving_num = 100
-        if episode >= moving_num-1:
-            moving_avg = np.mean(episode_rewards[-moving_num:]) # Compute moving average
-            print(f"CartPole-v0 episode {episode}, reward sum: {total_reward}, last {moving_num} avg: {moving_avg:.2f}")
+        moving_num, window = 195, 100
+        if episode >= window-1:
+            moving_avg = np.mean(episode_rewards[-window:]) # Compute moving average
+            print(f"CartPole-v0 episode {episode}, reward sum: {total_reward}, last {window} avg: {moving_avg:.2f}")
             
             if moving_avg > moving_num:
-                print(f"Stopping as the last {moving_num}-episode moving average is greater than {moving_num}")
+                print(f"Stopping as the last {window}-episode moving average is greater than {moving_num}")
                 break
         
         else:
             print(f"CartPole-v0 episode {episode}, reward sum: {total_reward}")
+
+        episode += 1
 
     env.close()
 
