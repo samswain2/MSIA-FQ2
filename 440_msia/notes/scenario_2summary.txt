@@ -1,0 +1,12 @@
+loaded input data
+Testing Input Data
+Building the model
+status:Optimal
+Total Demand:78026333
+Objective: 15005900898.0
+Weighted Average Distance: 192.3 miles
+Run Time in seconds 3.1
+Percent Demand served within 200 miles : 56.8
+Percent Demand served within 400 miles : 85.1
+Percent Demand served within 800 miles : 100.0
+Percent Demand served within 1600 miles : 100.0

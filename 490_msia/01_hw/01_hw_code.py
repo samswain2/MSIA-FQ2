@@ -72,7 +72,6 @@ def CartPole_RL():
             reward_history.append(reward)
 
         discounted_rewards = compute_discounted_rewards(reward_history)
-        # adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards)
 
         total_reward = sum(reward_history)
         episode_rewards.append(total_reward)
@@ -88,9 +87,7 @@ def CartPole_RL():
         else:
             print(f"CartPole-v0 episode {episode}, reward sum: {total_reward}")
 
-
-
-        ### TESTING TRAINING STOP
+        ### TRAINING STOP
 
         if total_reward == 200:  # Check for consecutive rewards of 200
             consecutive_200_rewards += 1
@@ -111,10 +108,6 @@ def CartPole_RL():
         # Modify the weight adjustment to respect the should_train flag
         if should_train:
             adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards)
-
-        ### TESTING TRAINING STOP
-
-
 
         episode += 1
 
