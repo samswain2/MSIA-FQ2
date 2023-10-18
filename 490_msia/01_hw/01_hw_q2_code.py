@@ -17,31 +17,30 @@ def check_gpu_availability():
     else:
         print("GPU is not available")
 
-check_gpu_availability()
-
-def preprocess(image):
-    """ prepro 210x160x3 uint8 frame into 6400 (80x80) 2D float array """
+def preprocess(image, downsample_factor=4):
+    """ prepro 210x160x3 uint8 frame into 1600 (40x40) 2D float array """
     image = image[35:195] # crop
-    image = image[::2,::2,0] # downsample by factor of 2
+    image = image[::downsample_factor,::downsample_factor,0] # downsample by factor of 4
     image[image == 144] = 0 # erase background (background type 1)
     image[image == 109] = 0 # erase background (background type 2)
     image[image != 0] = 1 # everything else (paddles, ball) just set to 1
     # In preprocess function
-    return np.reshape(image.astype(np.float64).ravel(), [80, 80])
+    return np.reshape(image.astype(np.float64).ravel(), [40, 40])
 
-def build_model(input_shape=(80, 80, 1), num_choices=6, reg=0.0001):
+
+def build_model(input_shape=(40, 40, 1), num_choices=2, reg=0.0001):
     model = tf.keras.Sequential([
-        tf.keras.layers.Conv2D(256, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg), input_shape=input_shape),
-        tf.keras.layers.Conv2D(128, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg)),
+        tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg), input_shape=input_shape),
+        tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg)),
         tf.keras.layers.Flatten(),
         tf.keras.layers.Dense(num_choices, activation="softmax")
     ])
     return model
 
-def select_action(model, observation, num_choices=6):
+def select_action(model, observation):
     probabilities = model.predict(np.array([observation]), verbose=0)[0]
-    # print(probabilities)
-    return np.random.choice(num_choices, p=probabilities)
+    action = np.random.choice([2, 3], p=probabilities)  # 2 is RIGHT and 3 is LEFT
+    return action
 
 def compute_discounted_rewards(reward_history, discount_factor=0.99):
     discounted_rewards, cumulative_reward = [], 0
@@ -62,7 +61,7 @@ def adjust_weights(model, optimizer, obs_history, action_history, discounted_rew
 
 def Pong_RL():
     env = gym.make("Pong-v0")
-    optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
     model = build_model()
     episode_rewards = []
     episode = 0
@@ -91,7 +90,7 @@ def Pong_RL():
         total_reward = sum(reward_history)
         episode_rewards.append(total_reward)
 
-        moving_num, window = 21, 100
+        moving_num, window = 0, 100
         if episode >= window-1:
             moving_avg = np.mean(episode_rewards[-window:])
             print(f"Pong-v0 episode {episode}, reward sum: {total_reward}, last {window} avg: {moving_avg:.2f}")
@@ -131,9 +130,16 @@ def Pong_RL():
     # Save Results
     if not os.path.exists('artifacts'):
         os.makedirs('artifacts')
-    plt.plot(episode_rewards)
+
+    # Calculate moving average of rewards
+    window = 100  # Size of the window for calculating moving average
+    moving_avgs = [np.mean(episode_rewards[max(0, i - window + 1):i+1]) for i in range(len(episode_rewards))]
+
+    plt.plot(episode_rewards, label='Total Reward')
+    plt.plot(moving_avgs, label=f'{window}-Episode Moving Average')
     plt.xlabel("Episode")
     plt.ylabel("Total Reward")
+    plt.legend()
     plt.savefig('artifacts/pong_rewards.png')
 
 if __name__ == "__main__":
