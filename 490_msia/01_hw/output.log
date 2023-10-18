@@ -1,0 +1,30 @@
+nohup: ignoring input
+2023-10-18 20:14:34.899727: I tensorflow/core/util/port.cc:111] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-10-18 20:14:34.950337: E tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:9342] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2023-10-18 20:14:34.950394: E tensorflow/compiler/xla/stream_executor/cuda/cuda_fft.cc:609] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2023-10-18 20:14:34.950431: E tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:1518] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2023-10-18 20:14:34.961440: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+2023-10-18 20:14:36.906165: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+GPU is available
+GPU device: PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:1', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:2', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:3', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:4', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:5', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:6', device_type='GPU')
+GPU device: PhysicalDevice(name='/physical_device:GPU:7', device_type='GPU')
+/nfs/home/sms5736/MSIA-FQ2/.venv/lib/python3.9/site-packages/gym/envs/registration.py:555: UserWarning: [33mWARN: The environment Pong-v0 is out of date. You should consider upgrading to version `v4`.[0m
+  logger.warn(
+A.L.E: Arcade Learning Environment (version 0.8.1+53f58b7)
+[Powered by Stella]
+2023-10-18 20:14:46.902224: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 9629 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:1a:00.0, compute capability: 7.5
+2023-10-18 20:14:46.903840: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 9629 MB memory:  -> device: 1, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:1b:00.0, compute capability: 7.5
+2023-10-18 20:14:46.905328: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 296 MB memory:  -> device: 2, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:3d:00.0, compute capability: 7.5
+2023-10-18 20:14:46.907122: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 195 MB memory:  -> device: 3, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:3e:00.0, compute capability: 7.5
+2023-10-18 20:14:46.908821: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:4 with 9629 MB memory:  -> device: 4, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:88:00.0, compute capability: 7.5
+2023-10-18 20:14:46.910060: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:5 with 197 MB memory:  -> device: 5, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:89:00.0, compute capability: 7.5
+2023-10-18 20:14:46.911433: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:6 with 9629 MB memory:  -> device: 6, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:b1:00.0, compute capability: 7.5
+2023-10-18 20:14:46.912525: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:7 with 9629 MB memory:  -> device: 7, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:b2:00.0, compute capability: 7.5
+2023-10-18 20:14:48.295114: I tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:442] Loaded cuDNN version 8900
