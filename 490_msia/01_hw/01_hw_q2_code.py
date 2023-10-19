@@ -16,7 +16,7 @@ def check_gpu_availability():
             print(f"GPU device: {gpu}", flush=True)
             tf.config.experimental.set_memory_growth(gpu, True)
 
-        os.environ["CUDA_VISIBLE_DEVICES"] = "1" # Set the second GPU as available
+        os.environ["CUDA_VISIBLE_DEVICES"] = "0" # Set the second GPU as available
         os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2" # Filter out warnings
 
     else:
@@ -30,36 +30,22 @@ def preprocess(image, downsample_factor=2):
     image[image == 109] = 0 # erase background (background type 2)
     image[image != 0] = 1 # everything else (paddles, ball) just set to 1
     # In preprocess function
-    return tf.convert_to_tensor(np.reshape(image.astype(np.float32).ravel(), [80, 80, 1]))
+    return tf.reshape(tf.cast(image, tf.float32), [80, 80, 1])
 
 
 def build_model(input_shape=(80, 80, 1), num_choices=2, reg=0.0001):
     model = tf.keras.Sequential([
-        tf.keras.layers.Conv2D(32, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg), input_shape=input_shape),
-        tf.keras.layers.BatchNormalization(),
-        tf.keras.layers.MaxPooling2D((2, 2)),
-        
-        # tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg)),
-        # tf.keras.layers.BatchNormalization(),
-        # tf.keras.layers.MaxPooling2D((2, 2)),
-        
-        tf.keras.layers.Flatten(),
-        tf.keras.layers.Dense(32, activation='relu'),
-        tf.keras.layers.Dense(num_choices, activation="softmax")
+        tf.keras.layers.Flatten(input_shape=input_shape),  # Set input_shape here
+        tf.keras.layers.Dense(256, activation='relu'),  # Dense hidden layer
+        tf.keras.layers.Dense(num_choices, activation="softmax")  # Dense output layer
     ])
-    return model
+    return model 
+
 
 def select_action(model, observation):
-    probabilities = model.predict(np.array([observation]), verbose=0)[0]
+    probabilities = model.predict(tf.expand_dims(observation, axis=0), verbose=0)[0]
     action = np.random.choice([2, 3], p=probabilities)  # 2 is RIGHT and 3 is LEFT
     return action
-
-# def compute_discounted_rewards(reward_history, discount_factor=0.99):
-#     discounted_rewards, cumulative_reward = [], 0
-#     for reward in reversed(reward_history):
-#         cumulative_reward = reward + discount_factor * cumulative_reward
-#         discounted_rewards.insert(0, cumulative_reward)
-#     return tf.convert_to_tensor(discounted_rewards, dtype=tf.float32)
 
 def compute_discounted_rewards(reward_history, discount_factor=0.99):
     discounted_rewards, cumulative_reward = [], 0
@@ -72,41 +58,24 @@ def compute_discounted_rewards(reward_history, discount_factor=0.99):
     std = np.std(discounted_rewards)
     normalized_rewards = (discounted_rewards - mean) / (std + 1e-8)  # Added epsilon to avoid division by zero
     
-    return tf.convert_to_tensor(normalized_rewards, dtype=tf.float32)
-
-# @tf.function(input_signature=[
-#     tf.TensorSpec(shape=[None, 80, 80, 1], dtype=tf.float32),
-#     tf.TensorSpec(shape=[None], dtype=tf.int32),
-#     tf.TensorSpec(shape=[None], dtype=tf.float32)
-# ])
-# def adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards):
-#     with tf.GradientTape() as tape:
-#         probs=model(tf.convert_to_tensor(obs_history, dtype=tf.float32))
-#         indices=tf.stack([tf.range(len(action_history),dtype=tf.int32),tf.convert_to_tensor(action_history,dtype=tf.int32)],axis=1)
-#         chosen_probs=tf.gather_nd(probs,indices)
-#         loss=-tf.math.log(chosen_probs)*discounted_rewards
-#         loss=tf.reduce_mean(loss)
-#     grads=tape.gradient(loss,model.trainable_variables)
-#     optimizer.apply_gradients(zip(grads,model.trainable_variables))
+    return normalized_rewards
 
 def adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards):
-    @tf.function(input_signature=[
-        tf.TensorSpec(shape=[None, 80, 80, 1], dtype=tf.float32),
-        tf.TensorSpec(shape=[None], dtype=tf.int32),
-        tf.TensorSpec(shape=[None], dtype=tf.float32)
-    ])
-    def inner_function(obs_history, action_history, discounted_rewards):
-        with tf.GradientTape() as tape:
-            probs = model(tf.convert_to_tensor(obs_history, dtype=tf.float32))
-            indices = tf.stack([tf.range(len(action_history), dtype=tf.int32),
-                                tf.convert_to_tensor(action_history, dtype=tf.int32)], axis=1)
-            chosen_probs = tf.gather_nd(probs, indices)
-            loss = -tf.math.log(chosen_probs) * discounted_rewards
-            loss = tf.reduce_sum(loss)
-        grads = tape.gradient(loss, model.trainable_variables)
-        optimizer.apply_gradients(zip(grads, model.trainable_variables))
-        
-    inner_function(obs_history, action_history, discounted_rewards)
+    print("Getting discounted rewards")
+    discounted_rewards = tf.convert_to_tensor(discounted_rewards, dtype=tf.float32)
+    with tf.GradientTape() as tape:
+        print("Getting probs")
+        probs=model(tf.convert_to_tensor(obs_history, dtype=tf.float32))
+        print("Getting Indices")
+        indices=tf.stack([tf.range(len(action_history),dtype=tf.int32),tf.convert_to_tensor(action_history,dtype=tf.int32)],axis=1)
+        print("Getting Chosen Probs")
+        chosen_probs=tf.gather_nd(probs,indices)
+        print("Getting Loss")
+        loss=-tf.math.log(chosen_probs)*discounted_rewards
+        loss=tf.reduce_mean(loss)
+    print("Applying Gradient and Optimizer")
+    grads=tape.gradient(loss,model.trainable_variables)
+    optimizer.apply_gradients(zip(grads,model.trainable_variables))
 
 def save_plot(episode_rewards, episode):
     window = 100  # Size of the window for calculating moving average
@@ -125,7 +94,7 @@ def Pong_RL():
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
     model = build_model()
     episode_rewards = []
-    episode = 0
+    episode = 0 
 
     consecutive_21_rewards = 0  # Count number of 21 occurences
     should_train = True  # Initialize flag for training
@@ -137,14 +106,19 @@ def Pong_RL():
         terminated = False
         truncated = False
 
+        print("Starting Game")
+
         while not terminated and not truncated:
             processed_observation = preprocess(observation)
             action = select_action(model, processed_observation)
-            obs_history.append(tf.convert_to_tensor(processed_observation))
+            obs_history.append(processed_observation)
             action_history.append(action)
 
             observation, reward, terminated, truncated, info = env.step(action)
+            
             reward_history.append(reward)
+
+        print("Finishing Game")
 
         discounted_rewards = compute_discounted_rewards(reward_history)
 
@@ -181,8 +155,10 @@ def Pong_RL():
             consecutive_21_rewards = 0  # Reset the counter if the reward is not 21
 
         # Modify the weight adjustment to respect the should_train flag
+        print("Starting Model Training")
         if should_train:
             adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards)
+        print("Ending Model Training")
 
         # Save the model every 100 iterations
         if episode % 100 == 0:

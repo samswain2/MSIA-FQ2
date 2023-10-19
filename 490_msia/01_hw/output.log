@@ -1,368 +1,477 @@
 nohup: ignoring input
-2023-10-19 04:43:24.509596: I tensorflow/core/util/port.cc:111] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
-2023-10-19 04:43:26.806036: E tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:9342] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
-2023-10-19 04:43:26.806120: E tensorflow/compiler/xla/stream_executor/cuda/cuda_fft.cc:609] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
-2023-10-19 04:43:26.893111: E tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:1518] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
-2023-10-19 04:43:27.960285: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+2023-10-19 21:26:42.274298: I tensorflow/core/util/port.cc:111] oneDNN custom operations are on. You may see slightly different numerical results due to floating-point round-off errors from different computation orders. To turn them off, set the environment variable `TF_ENABLE_ONEDNN_OPTS=0`.
+2023-10-19 21:26:42.335965: E tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:9342] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+2023-10-19 21:26:42.336026: E tensorflow/compiler/xla/stream_executor/cuda/cuda_fft.cc:609] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+2023-10-19 21:26:42.336065: E tensorflow/compiler/xla/stream_executor/cuda/cuda_blas.cc:1518] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+2023-10-19 21:26:42.347741: I tensorflow/core/platform/cpu_feature_guard.cc:182] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
 To enable the following instructions: AVX2 AVX512F AVX512_VNNI FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
-2023-10-19 04:43:34.536758: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
+2023-10-19 21:26:44.263451: W tensorflow/compiler/tf2tensorrt/utils/py_utils.cc:38] TF-TRT Warning: Could not find TensorRT
 GPU is available
 GPU device: PhysicalDevice(name='/physical_device:GPU:0', device_type='GPU')
 GPU device: PhysicalDevice(name='/physical_device:GPU:1', device_type='GPU')
 GPU device: PhysicalDevice(name='/physical_device:GPU:2', device_type='GPU')
 GPU device: PhysicalDevice(name='/physical_device:GPU:3', device_type='GPU')
 GPU device: PhysicalDevice(name='/physical_device:GPU:4', device_type='GPU')
-GPU device: PhysicalDevice(name='/physical_device:GPU:5', device_type='GPU')
-GPU device: PhysicalDevice(name='/physical_device:GPU:6', device_type='GPU')
-GPU device: PhysicalDevice(name='/physical_device:GPU:7', device_type='GPU')
 /nfs/home/sms5736/MSIA-FQ2/.venv/lib/python3.9/site-packages/gym/envs/registration.py:555: UserWarning: [33mWARN: The environment Pong-v0 is out of date. You should consider upgrading to version `v4`.[0m
   logger.warn(
 A.L.E: Arcade Learning Environment (version 0.8.1+53f58b7)
 [Powered by Stella]
-2023-10-19 04:43:51.547338: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 9629 MB memory:  -> device: 0, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:1a:00.0, compute capability: 7.5
-2023-10-19 04:43:51.548634: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 9629 MB memory:  -> device: 1, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:1b:00.0, compute capability: 7.5
-2023-10-19 04:43:51.549658: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 8323 MB memory:  -> device: 2, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:3d:00.0, compute capability: 7.5
-2023-10-19 04:43:51.550690: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 9629 MB memory:  -> device: 3, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:3e:00.0, compute capability: 7.5
-2023-10-19 04:43:51.551632: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:4 with 634 MB memory:  -> device: 4, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:88:00.0, compute capability: 7.5
-2023-10-19 04:43:51.552548: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:5 with 556 MB memory:  -> device: 5, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:89:00.0, compute capability: 7.5
-2023-10-19 04:43:51.553642: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:6 with 9629 MB memory:  -> device: 6, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:b1:00.0, compute capability: 7.5
-2023-10-19 04:43:51.554662: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:7 with 9629 MB memory:  -> device: 7, name: NVIDIA GeForce RTX 2080 Ti, pci bus id: 0000:b2:00.0, compute capability: 7.5
-2023-10-19 04:43:53.557081: I tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:442] Loaded cuDNN version 8900
+2023-10-19 21:26:51.173385: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:0 with 46701 MB memory:  -> device: 0, name: NVIDIA RTX A6000, pci bus id: 0000:1a:00.0, compute capability: 8.6
+2023-10-19 21:26:51.174124: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:1 with 152 MB memory:  -> device: 1, name: NVIDIA RTX A6000, pci bus id: 0000:1b:00.0, compute capability: 8.6
+2023-10-19 21:26:51.174708: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:2 with 46701 MB memory:  -> device: 2, name: NVIDIA RTX A6000, pci bus id: 0000:88:00.0, compute capability: 8.6
+2023-10-19 21:26:51.175612: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:3 with 506 MB memory:  -> device: 3, name: NVIDIA RTX A6000, pci bus id: 0000:89:00.0, compute capability: 8.6
+2023-10-19 21:26:51.176400: I tensorflow/core/common_runtime/gpu/gpu_device.cc:1886] Created device /job:localhost/replica:0/task:0/device:GPU:4 with 504 MB memory:  -> device: 4, name: NVIDIA RTX A6000, pci bus id: 0000:b1:00.0, compute capability: 8.6
+Starting Game
+Finishing Game
 Pong-v0 episode 0, reward sum: -20.0
-2023-10-19 04:45:36.458423: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.49GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-2023-10-19 04:45:36.458506: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.49GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-2023-10-19 04:45:36.497774: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x7f5fa0eb9fd0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
-2023-10-19 04:45:36.497806: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497815: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (1): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497822: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (2): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497828: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (3): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497835: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (4): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497840: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (5): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497846: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (6): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.497853: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (7): NVIDIA GeForce RTX 2080 Ti, Compute Capability 7.5
-2023-10-19 04:45:36.548695: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
-2023-10-19 04:45:36.780742: I ./tensorflow/compiler/jit/device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
+2023-10-19 21:28:18.634601: I tensorflow/compiler/xla/service/service.cc:168] XLA service 0x559f34cd80e0 initialized for platform CUDA (this does not guarantee that XLA will be used). Devices:
+2023-10-19 21:28:18.634658: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (0): NVIDIA RTX A6000, Compute Capability 8.6
+2023-10-19 21:28:18.634669: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (1): NVIDIA RTX A6000, Compute Capability 8.6
+2023-10-19 21:28:18.634675: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (2): NVIDIA RTX A6000, Compute Capability 8.6
+2023-10-19 21:28:18.634681: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (3): NVIDIA RTX A6000, Compute Capability 8.6
+2023-10-19 21:28:18.634694: I tensorflow/compiler/xla/service/service.cc:176]   StreamExecutor device (4): NVIDIA RTX A6000, Compute Capability 8.6
+2023-10-19 21:28:18.641003: I tensorflow/compiler/mlir/tensorflow/utils/dump_mlir_util.cc:269] disabling MLIR crash reproducer, set env var `MLIR_CRASH_REPRODUCER_DIRECTORY` to enable.
+2023-10-19 21:28:18.865031: I tensorflow/compiler/xla/stream_executor/cuda/cuda_dnn.cc:442] Loaded cuDNN version 8900
+2023-10-19 21:28:19.005679: I ./tensorflow/compiler/jit/device_compiler.h:186] Compiled cluster using XLA!  This line is logged at most once for the lifetime of the process.
 WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
 WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 1, reward sum: -21.0
-2023-10-19 04:46:50.336371: W tensorflow/tsl/framework/bfc_allocator.cc:366] Garbage collection: deallocate free memory regions (i.e., allocations) so that we can re-allocate a larger region to avoid OOM due to memory fragmentation. If you see this message frequently, you are running near the threshold of the available device memory and re-allocation may incur great performance overhead. You may try smaller batch sizes to observe the performance impact. Set TF_ENABLE_GPU_GARBAGE_COLLECTION=false if you'd like to disable this feature.
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 2, reward sum: -21.0
-Pong-v0 episode 3, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 3, reward sum: -18.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 4, reward sum: -21.0
-WARNING:tensorflow:5 out of the last 5 calls to <function adjust_weights.<locals>.inner_function at 0x7f66fb091940> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
-WARNING:tensorflow:5 out of the last 5 calls to <function adjust_weights.<locals>.inner_function at 0x7f66fb091940> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
-Pong-v0 episode 5, reward sum: -21.0
-2023-10-19 04:52:00.878531: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 6.93GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-2023-10-19 04:52:00.878594: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 6.93GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-WARNING:tensorflow:6 out of the last 6 calls to <function adjust_weights.<locals>.inner_function at 0x7f66783b4e50> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
-WARNING:tensorflow:6 out of the last 6 calls to <function adjust_weights.<locals>.inner_function at 0x7f66783b4e50> triggered tf.function retracing. Tracing is expensive and the excessive number of tracings could be due to (1) creating @tf.function repeatedly in a loop, (2) passing tensors with different shapes, (3) passing Python objects instead of tensors. For (1), please define your @tf.function outside of the loop. For (2), @tf.function has reduce_retracing=True option that can avoid unnecessary retracing. For (3), please refer to https://www.tensorflow.org/guide/function#controlling_retracing and https://www.tensorflow.org/api_docs/python/tf/function for  more details.
-Pong-v0 episode 6, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 5, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 6, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 7, reward sum: -18.0
-2023-10-19 04:54:51.802542: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.03GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-2023-10-19 04:54:51.802608: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.03GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-Pong-v0 episode 8, reward sum: -19.0
-2023-10-19 04:56:36.277129: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.85GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-2023-10-19 04:56:36.277196: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.85GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 8, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 9, reward sum: -20.0
-Pong-v0 episode 10, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 10, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 11, reward sum: -20.0
-2023-10-19 05:01:57.751522: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.88GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
-2023-10-19 05:01:57.751591: W tensorflow/tsl/framework/bfc_allocator.cc:296] Allocator (GPU_0_bfc) ran out of memory trying to allocate 7.88GiB with freed_by_count=0. The caller indicates that this is not a failure, but this may mean that there could be performance gains if more memory were available.
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 12, reward sum: -21.0
-Pong-v0 episode 13, reward sum: -18.0
-Pong-v0 episode 14, reward sum: -19.0
-Pong-v0 episode 15, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 13, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 14, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 15, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 16, reward sum: -21.0
-Pong-v0 episode 17, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 17, reward sum: -19.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 18, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 19, reward sum: -21.0
-Pong-v0 episode 20, reward sum: -21.0
-Pong-v0 episode 21, reward sum: -20.0
-Pong-v0 episode 22, reward sum: -21.0
-Pong-v0 episode 23, reward sum: -20.0
-Pong-v0 episode 24, reward sum: -20.0
-Pong-v0 episode 25, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 20, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 21, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 22, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 23, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 24, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 25, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 26, reward sum: -21.0
-Pong-v0 episode 27, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 27, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 28, reward sum: -21.0
-Pong-v0 episode 29, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 29, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 30, reward sum: -21.0
-Pong-v0 episode 31, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 31, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 32, reward sum: -20.0
-Pong-v0 episode 33, reward sum: -19.0
-Pong-v0 episode 34, reward sum: -21.0
-Pong-v0 episode 35, reward sum: -19.0
-Pong-v0 episode 36, reward sum: -19.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 33, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 34, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 35, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 36, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
 Pong-v0 episode 37, reward sum: -21.0
-Pong-v0 episode 38, reward sum: -21.0
-Pong-v0 episode 39, reward sum: -19.0
-Pong-v0 episode 40, reward sum: -20.0
-Pong-v0 episode 41, reward sum: -21.0
-Pong-v0 episode 42, reward sum: -21.0
-Pong-v0 episode 43, reward sum: -21.0
-Pong-v0 episode 44, reward sum: -21.0
-Pong-v0 episode 45, reward sum: -21.0
-Pong-v0 episode 46, reward sum: -20.0
-Pong-v0 episode 47, reward sum: -21.0
-Pong-v0 episode 48, reward sum: -20.0
-Pong-v0 episode 49, reward sum: -20.0
-Pong-v0 episode 50, reward sum: -21.0
-Pong-v0 episode 51, reward sum: -21.0
-Pong-v0 episode 52, reward sum: -16.0
-Pong-v0 episode 53, reward sum: -20.0
-Pong-v0 episode 54, reward sum: -20.0
-Pong-v0 episode 55, reward sum: -21.0
-Pong-v0 episode 56, reward sum: -20.0
-Pong-v0 episode 57, reward sum: -20.0
-Pong-v0 episode 58, reward sum: -21.0
-Pong-v0 episode 59, reward sum: -21.0
-Pong-v0 episode 60, reward sum: -21.0
-Pong-v0 episode 61, reward sum: -19.0
-Pong-v0 episode 62, reward sum: -21.0
-Pong-v0 episode 63, reward sum: -21.0
-Pong-v0 episode 64, reward sum: -21.0
-Pong-v0 episode 65, reward sum: -21.0
-Pong-v0 episode 66, reward sum: -21.0
-Pong-v0 episode 67, reward sum: -21.0
-Pong-v0 episode 68, reward sum: -21.0
-Pong-v0 episode 69, reward sum: -21.0
-Pong-v0 episode 70, reward sum: -21.0
-Pong-v0 episode 71, reward sum: -21.0
-Pong-v0 episode 72, reward sum: -19.0
-Pong-v0 episode 73, reward sum: -19.0
-Pong-v0 episode 74, reward sum: -21.0
-Pong-v0 episode 75, reward sum: -21.0
-Pong-v0 episode 76, reward sum: -19.0
-Pong-v0 episode 77, reward sum: -19.0
-Pong-v0 episode 78, reward sum: -21.0
-Pong-v0 episode 79, reward sum: -21.0
-Pong-v0 episode 80, reward sum: -21.0
-Pong-v0 episode 81, reward sum: -21.0
-Pong-v0 episode 82, reward sum: -20.0
-Pong-v0 episode 83, reward sum: -21.0
-Pong-v0 episode 84, reward sum: -21.0
-Pong-v0 episode 85, reward sum: -21.0
-Pong-v0 episode 86, reward sum: -20.0
-Pong-v0 episode 87, reward sum: -21.0
-Pong-v0 episode 88, reward sum: -21.0
-Pong-v0 episode 89, reward sum: -21.0
-Pong-v0 episode 90, reward sum: -21.0
-Pong-v0 episode 91, reward sum: -21.0
-Pong-v0 episode 92, reward sum: -21.0
-Pong-v0 episode 93, reward sum: -21.0
-Pong-v0 episode 94, reward sum: -20.0
-Pong-v0 episode 95, reward sum: -21.0
-Pong-v0 episode 96, reward sum: -21.0
-Pong-v0 episode 97, reward sum: -20.0
-Pong-v0 episode 98, reward sum: -20.0
-Pong-v0 episode 99, reward sum: -20.0, last 100 avg: -20.40
-Pong-v0 episode 100, reward sum: -21.0, last 100 avg: -20.41
-WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
-WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
-Pong-v0 episode 101, reward sum: -19.0, last 100 avg: -20.39
-Pong-v0 episode 102, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 103, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 104, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 105, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 106, reward sum: -20.0, last 100 avg: -20.39
-Pong-v0 episode 107, reward sum: -20.0, last 100 avg: -20.41
-Pong-v0 episode 108, reward sum: -21.0, last 100 avg: -20.43
-Pong-v0 episode 109, reward sum: -19.0, last 100 avg: -20.42
-Pong-v0 episode 110, reward sum: -21.0, last 100 avg: -20.43
-Pong-v0 episode 111, reward sum: -21.0, last 100 avg: -20.44
-Pong-v0 episode 112, reward sum: -21.0, last 100 avg: -20.44
-Pong-v0 episode 113, reward sum: -20.0, last 100 avg: -20.46
-Pong-v0 episode 114, reward sum: -21.0, last 100 avg: -20.48
-Pong-v0 episode 115, reward sum: -19.0, last 100 avg: -20.47
-Pong-v0 episode 116, reward sum: -17.0, last 100 avg: -20.43
-Pong-v0 episode 117, reward sum: -21.0, last 100 avg: -20.44
-Pong-v0 episode 118, reward sum: -21.0, last 100 avg: -20.44
-Pong-v0 episode 119, reward sum: -18.0, last 100 avg: -20.41
-Pong-v0 episode 120, reward sum: -19.0, last 100 avg: -20.39
-Pong-v0 episode 121, reward sum: -21.0, last 100 avg: -20.40
-Pong-v0 episode 122, reward sum: -20.0, last 100 avg: -20.39
-Pong-v0 episode 123, reward sum: -19.0, last 100 avg: -20.38
-Pong-v0 episode 124, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 125, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 126, reward sum: -20.0, last 100 avg: -20.38
-Pong-v0 episode 127, reward sum: -20.0, last 100 avg: -20.37
-Pong-v0 episode 128, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 129, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 130, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 131, reward sum: -19.0, last 100 avg: -20.37
-Pong-v0 episode 132, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 133, reward sum: -19.0, last 100 avg: -20.38
-Pong-v0 episode 134, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 135, reward sum: -21.0, last 100 avg: -20.40
-Pong-v0 episode 136, reward sum: -21.0, last 100 avg: -20.42
-Pong-v0 episode 137, reward sum: -21.0, last 100 avg: -20.42
-Pong-v0 episode 138, reward sum: -19.0, last 100 avg: -20.40
-Pong-v0 episode 139, reward sum: -19.0, last 100 avg: -20.40
-Pong-v0 episode 140, reward sum: -20.0, last 100 avg: -20.40
-Pong-v0 episode 141, reward sum: -19.0, last 100 avg: -20.38
-Pong-v0 episode 142, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 143, reward sum: -19.0, last 100 avg: -20.36
-Pong-v0 episode 144, reward sum: -20.0, last 100 avg: -20.35
-Pong-v0 episode 145, reward sum: -19.0, last 100 avg: -20.33
-Pong-v0 episode 146, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 147, reward sum: -19.0, last 100 avg: -20.32
-Pong-v0 episode 148, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 149, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 150, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 151, reward sum: -19.0, last 100 avg: -20.31
-Pong-v0 episode 152, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 153, reward sum: -20.0, last 100 avg: -20.36
-Pong-v0 episode 154, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 155, reward sum: -19.0, last 100 avg: -20.35
-Pong-v0 episode 156, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 157, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 158, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 159, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 160, reward sum: -19.0, last 100 avg: -20.35
-Pong-v0 episode 161, reward sum: -20.0, last 100 avg: -20.36
-Pong-v0 episode 162, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 163, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 164, reward sum: -20.0, last 100 avg: -20.35
-Pong-v0 episode 165, reward sum: -20.0, last 100 avg: -20.34
-Pong-v0 episode 166, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 167, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 168, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 169, reward sum: -19.0, last 100 avg: -20.32
-Pong-v0 episode 170, reward sum: -20.0, last 100 avg: -20.31
-Pong-v0 episode 171, reward sum: -21.0, last 100 avg: -20.31
-Pong-v0 episode 172, reward sum: -20.0, last 100 avg: -20.32
-Pong-v0 episode 173, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 174, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 175, reward sum: -20.0, last 100 avg: -20.32
-Pong-v0 episode 176, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 177, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 178, reward sum: -20.0, last 100 avg: -20.35
-Pong-v0 episode 179, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 180, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 181, reward sum: -20.0, last 100 avg: -20.34
-Pong-v0 episode 182, reward sum: -20.0, last 100 avg: -20.34
-Pong-v0 episode 183, reward sum: -19.0, last 100 avg: -20.32
-Pong-v0 episode 184, reward sum: -21.0, last 100 avg: -20.32
-Pong-v0 episode 185, reward sum: -21.0, last 100 avg: -20.32
-Pong-v0 episode 186, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 187, reward sum: -20.0, last 100 avg: -20.32
-Pong-v0 episode 188, reward sum: -18.0, last 100 avg: -20.29
-Pong-v0 episode 189, reward sum: -20.0, last 100 avg: -20.28
-Pong-v0 episode 190, reward sum: -21.0, last 100 avg: -20.28
-Pong-v0 episode 191, reward sum: -19.0, last 100 avg: -20.26
-Pong-v0 episode 192, reward sum: -21.0, last 100 avg: -20.26
-Pong-v0 episode 193, reward sum: -20.0, last 100 avg: -20.25
-Pong-v0 episode 194, reward sum: -21.0, last 100 avg: -20.26
-Pong-v0 episode 195, reward sum: -20.0, last 100 avg: -20.25
-Pong-v0 episode 196, reward sum: -19.0, last 100 avg: -20.23
-Pong-v0 episode 197, reward sum: -21.0, last 100 avg: -20.24
-Pong-v0 episode 198, reward sum: -18.0, last 100 avg: -20.22
-Pong-v0 episode 199, reward sum: -21.0, last 100 avg: -20.23
-Pong-v0 episode 200, reward sum: -19.0, last 100 avg: -20.21
-WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
-WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
-Pong-v0 episode 201, reward sum: -21.0, last 100 avg: -20.23
-Pong-v0 episode 202, reward sum: -21.0, last 100 avg: -20.23
-Pong-v0 episode 203, reward sum: -21.0, last 100 avg: -20.23
-Pong-v0 episode 204, reward sum: -21.0, last 100 avg: -20.23
-Pong-v0 episode 205, reward sum: -21.0, last 100 avg: -20.23
-Pong-v0 episode 206, reward sum: -21.0, last 100 avg: -20.24
-Pong-v0 episode 207, reward sum: -21.0, last 100 avg: -20.25
-Pong-v0 episode 208, reward sum: -21.0, last 100 avg: -20.25
-Pong-v0 episode 209, reward sum: -21.0, last 100 avg: -20.27
-Pong-v0 episode 210, reward sum: -21.0, last 100 avg: -20.27
-Pong-v0 episode 211, reward sum: -20.0, last 100 avg: -20.26
-Pong-v0 episode 212, reward sum: -21.0, last 100 avg: -20.26
-Pong-v0 episode 213, reward sum: -21.0, last 100 avg: -20.27
-Pong-v0 episode 214, reward sum: -21.0, last 100 avg: -20.27
-Pong-v0 episode 215, reward sum: -21.0, last 100 avg: -20.29
-Pong-v0 episode 216, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 217, reward sum: -19.0, last 100 avg: -20.31
-Pong-v0 episode 218, reward sum: -21.0, last 100 avg: -20.31
-Pong-v0 episode 219, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 220, reward sum: -19.0, last 100 avg: -20.34
-Pong-v0 episode 221, reward sum: -19.0, last 100 avg: -20.32
-Pong-v0 episode 222, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 223, reward sum: -20.0, last 100 avg: -20.34
-Pong-v0 episode 224, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 225, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 226, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 227, reward sum: -19.0, last 100 avg: -20.34
-Pong-v0 episode 228, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 229, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 230, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 231, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 232, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 233, reward sum: -20.0, last 100 avg: -20.36
-Pong-v0 episode 234, reward sum: -19.0, last 100 avg: -20.34
-Pong-v0 episode 235, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 236, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 237, reward sum: -19.0, last 100 avg: -20.31
-Pong-v0 episode 238, reward sum: -20.0, last 100 avg: -20.32
-Pong-v0 episode 239, reward sum: -18.0, last 100 avg: -20.31
-Pong-v0 episode 240, reward sum: -20.0, last 100 avg: -20.31
-Pong-v0 episode 241, reward sum: -20.0, last 100 avg: -20.32
-Pong-v0 episode 242, reward sum: -21.0, last 100 avg: -20.32
-Pong-v0 episode 243, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 244, reward sum: -19.0, last 100 avg: -20.32
-Pong-v0 episode 245, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 246, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 247, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 248, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 249, reward sum: -20.0, last 100 avg: -20.36
-Pong-v0 episode 250, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 251, reward sum: -19.0, last 100 avg: -20.36
-Pong-v0 episode 252, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 253, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 254, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 255, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 256, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 257, reward sum: -19.0, last 100 avg: -20.37
-Pong-v0 episode 258, reward sum: -19.0, last 100 avg: -20.35
-Pong-v0 episode 259, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 260, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 261, reward sum: -18.0, last 100 avg: -20.35
-Pong-v0 episode 262, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 263, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 264, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 265, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 266, reward sum: -20.0, last 100 avg: -20.36
-Pong-v0 episode 267, reward sum: -19.0, last 100 avg: -20.34
-Pong-v0 episode 268, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 269, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 270, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 271, reward sum: -20.0, last 100 avg: -20.35
-Pong-v0 episode 272, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 273, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 274, reward sum: -21.0, last 100 avg: -20.37
-Pong-v0 episode 275, reward sum: -20.0, last 100 avg: -20.37
-Pong-v0 episode 276, reward sum: -19.0, last 100 avg: -20.35
-Pong-v0 episode 277, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 278, reward sum: -20.0, last 100 avg: -20.35
-Pong-v0 episode 279, reward sum: -20.0, last 100 avg: -20.34
-Pong-v0 episode 280, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 281, reward sum: -20.0, last 100 avg: -20.34
-Pong-v0 episode 282, reward sum: -18.0, last 100 avg: -20.32
-Pong-v0 episode 283, reward sum: -20.0, last 100 avg: -20.33
-Pong-v0 episode 284, reward sum: -20.0, last 100 avg: -20.32
-Pong-v0 episode 285, reward sum: -19.0, last 100 avg: -20.30
-Pong-v0 episode 286, reward sum: -20.0, last 100 avg: -20.29
-Pong-v0 episode 287, reward sum: -21.0, last 100 avg: -20.30
-Pong-v0 episode 288, reward sum: -21.0, last 100 avg: -20.33
-Pong-v0 episode 289, reward sum: -19.0, last 100 avg: -20.32
-Pong-v0 episode 290, reward sum: -21.0, last 100 avg: -20.32
-Pong-v0 episode 291, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 292, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 293, reward sum: -21.0, last 100 avg: -20.35
-Pong-v0 episode 294, reward sum: -19.0, last 100 avg: -20.33
-Pong-v0 episode 295, reward sum: -21.0, last 100 avg: -20.34
-Pong-v0 episode 296, reward sum: -21.0, last 100 avg: -20.36
-Pong-v0 episode 297, reward sum: -20.0, last 100 avg: -20.35
-Pong-v0 episode 298, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 299, reward sum: -21.0, last 100 avg: -20.38
-Pong-v0 episode 300, reward sum: -20.0, last 100 avg: -20.39
-WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
-WARNING:tensorflow:Compiled the loaded model, but the compiled metrics have yet to be built. `model.compile_metrics` will be empty until you train or evaluate the model.
-Pong-v0 episode 301, reward sum: -21.0, last 100 avg: -20.39
-Pong-v0 episode 302, reward sum: -20.0, last 100 avg: -20.38
-Pong-v0 episode 303, reward sum: -21.0, last 100 avg: -20.38
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 38, reward sum: -20.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 39, reward sum: -21.0
+Starting Model Training
+Getting discounted rewards
+Getting probs
+Getting Indices
+Getting Chosen Probs
+Getting Loss
+Applying Gradient and Optimizer
+Ending Model Training
+Starting Game
+Finishing Game
+Pong-v0 episode 40, reward sum: -21.0
