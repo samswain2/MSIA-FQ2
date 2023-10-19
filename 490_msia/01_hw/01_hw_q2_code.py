@@ -16,7 +16,8 @@ def check_gpu_availability():
             print(f"GPU device: {gpu}", flush=True)
             tf.config.experimental.set_memory_growth(gpu, True)
 
-        os.environ["CUDA_VISIBLE_DEVICES"] = "3" # Set the fourth GPU as available
+        os.environ["CUDA_VISIBLE_DEVICES"] = "1" # Set the second GPU as available
+        os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2" # Filter out warnings
 
     else:
         print("GPU is not available", flush=True)
@@ -38,13 +39,12 @@ def build_model(input_shape=(80, 80, 1), num_choices=2, reg=0.0001):
         tf.keras.layers.BatchNormalization(),
         tf.keras.layers.MaxPooling2D((2, 2)),
         
-        tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg)),
-        tf.keras.layers.BatchNormalization(),
-        tf.keras.layers.MaxPooling2D((2, 2)),
+        # tf.keras.layers.Conv2D(64, kernel_size=(3, 3), activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg)),
+        # tf.keras.layers.BatchNormalization(),
+        # tf.keras.layers.MaxPooling2D((2, 2)),
         
         tf.keras.layers.Flatten(),
-        tf.keras.layers.Dropout(0.5),
-        tf.keras.layers.Dense(64, activation='relu'),
+        tf.keras.layers.Dense(32, activation='relu'),
         tf.keras.layers.Dense(num_choices, activation="softmax")
     ])
     return model
@@ -54,12 +54,25 @@ def select_action(model, observation):
     action = np.random.choice([2, 3], p=probabilities)  # 2 is RIGHT and 3 is LEFT
     return action
 
+# def compute_discounted_rewards(reward_history, discount_factor=0.99):
+#     discounted_rewards, cumulative_reward = [], 0
+#     for reward in reversed(reward_history):
+#         cumulative_reward = reward + discount_factor * cumulative_reward
+#         discounted_rewards.insert(0, cumulative_reward)
+#     return tf.convert_to_tensor(discounted_rewards, dtype=tf.float32)
+
 def compute_discounted_rewards(reward_history, discount_factor=0.99):
     discounted_rewards, cumulative_reward = [], 0
     for reward in reversed(reward_history):
         cumulative_reward = reward + discount_factor * cumulative_reward
         discounted_rewards.insert(0, cumulative_reward)
-    return tf.convert_to_tensor(discounted_rewards, dtype=tf.float32)
+    
+    # Normalization of discounted rewards
+    mean = np.mean(discounted_rewards)
+    std = np.std(discounted_rewards)
+    normalized_rewards = (discounted_rewards - mean) / (std + 1e-8)  # Added epsilon to avoid division by zero
+    
+    return tf.convert_to_tensor(normalized_rewards, dtype=tf.float32)
 
 # @tf.function(input_signature=[
 #     tf.TensorSpec(shape=[None, 80, 80, 1], dtype=tf.float32),
@@ -94,6 +107,18 @@ def adjust_weights(model, optimizer, obs_history, action_history, discounted_rew
         optimizer.apply_gradients(zip(grads, model.trainable_variables))
         
     inner_function(obs_history, action_history, discounted_rewards)
+
+def save_plot(episode_rewards, episode):
+    window = 100  # Size of the window for calculating moving average
+    moving_avgs = [np.mean(episode_rewards[max(0, i - window + 1):i + 1]) for i in range(len(episode_rewards))]
+    
+    plt.plot(episode_rewards, label='Total Reward')
+    plt.plot(moving_avgs, label=f'{window}-Episode Moving Average')
+    plt.xlabel("Episode")
+    plt.ylabel("Total Reward")
+    plt.legend()
+    plt.savefig(f'artifacts/pong_rewards_{episode}.png')
+    plt.close()
 
 def Pong_RL():
     env = gym.make("Pong-v0")
@@ -158,6 +183,13 @@ def Pong_RL():
         # Modify the weight adjustment to respect the should_train flag
         if should_train:
             adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards)
+
+        # Save the model every 100 iterations
+        if episode % 100 == 0:
+            model.save(f"saved_model/pong_model_{episode}")
+            
+        # Save a reward plot every iteration
+        save_plot(episode_rewards, episode)
 
         episode += 1
 
