@@ -22,6 +22,8 @@ def check_gpu_availability():
     else:
         print("GPU is not available", flush=True)
 
+check_gpu_availability()
+
 def preprocess(image, downsample_factor=2):
     """ prepro 210x160x3 uint8 frame into 6400 (80x80) 2D float array """
     image = image[35:195] # crop
@@ -44,8 +46,9 @@ def build_model(input_shape=(80, 80, 1), num_choices=2, reg=0.0001):
 
 def select_action(model, observation):
     probabilities = model.predict(tf.expand_dims(observation, axis=0), verbose=0)[0]
-    action = np.random.choice([2, 3], p=probabilities)  # 2 is RIGHT and 3 is LEFT
-    return action
+    action_idx = np.random.choice([0, 1], p=probabilities)  # Choose between indices 0 and 1
+    return action_idx  # Return the selected action index (either 0 or 1)
+
 
 def compute_discounted_rewards(reward_history, discount_factor=0.99):
     discounted_rewards, cumulative_reward = [], 0
@@ -61,21 +64,50 @@ def compute_discounted_rewards(reward_history, discount_factor=0.99):
     return normalized_rewards
 
 def adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards):
-    print("Getting discounted rewards")
+    # Added print statement to observe the incoming discounted_rewards
+    # print(f"Initial discounted_rewards: {discounted_rewards}")
+
+    # print("Getting discounted rewards", flush=True)
     discounted_rewards = tf.convert_to_tensor(discounted_rewards, dtype=tf.float32)
+
+    # Added print statement to observe the tensor-converted discounted_rewards
+    # print(f"Tensor-converted discounted_rewards: {discounted_rewards}")
+
     with tf.GradientTape() as tape:
-        print("Getting probs")
-        probs=model(tf.convert_to_tensor(obs_history, dtype=tf.float32))
-        print("Getting Indices")
-        indices=tf.stack([tf.range(len(action_history),dtype=tf.int32),tf.convert_to_tensor(action_history,dtype=tf.int32)],axis=1)
-        print("Getting Chosen Probs")
-        chosen_probs=tf.gather_nd(probs,indices)
-        print("Getting Loss")
-        loss=-tf.math.log(chosen_probs)*discounted_rewards
-        loss=tf.reduce_mean(loss)
-    print("Applying Gradient and Optimizer")
-    grads=tape.gradient(loss,model.trainable_variables)
-    optimizer.apply_gradients(zip(grads,model.trainable_variables))
+        # print("Getting probs", flush=True)
+        probs = model(tf.convert_to_tensor(obs_history, dtype=tf.float32))
+
+        # Added print statement to observe the model probabilities
+        # print(f"Model probabilities: {probs}")
+
+        # print("Getting Indices", flush=True)
+        indices = tf.stack([tf.range(len(action_history), dtype=tf.int32), tf.convert_to_tensor(action_history, dtype=tf.int32)], axis=1)
+
+        # Added print statement to observe the indices
+        # print(f"indices: {indices}")
+
+        # print("Getting Chosen Probs", flush=True)
+        chosen_probs = tf.gather_nd(probs, indices)
+
+        # Added print statement to observe the chosen probabilities
+        # print(f"Chosen probabilities: {chosen_probs}")
+        # print(f"Chosen probabilities: {chosen_probs[:4].numpy()}")
+
+        # print("Getting Loss", flush=True)
+        loss = -tf.math.log(chosen_probs) * discounted_rewards
+        loss = tf.reduce_sum(loss)
+
+        # Added print statement to observe the loss
+        print(f"Loss: {loss}")
+
+    # print("Applying Gradient and Optimizer", flush=True)
+    grads = tape.gradient(loss, model.trainable_variables)
+    optimizer.apply_gradients(zip(grads, model.trainable_variables))
+
+    # Added print statement to observe the applied gradients
+    # print(f"Applied gradients: {grads}")
+
+
 
 def save_plot(episode_rewards, episode):
     window = 100  # Size of the window for calculating moving average
@@ -106,7 +138,7 @@ def Pong_RL():
         terminated = False
         truncated = False
 
-        print("Starting Game")
+        # print("Starting Game", flush=True)
 
         while not terminated and not truncated:
             processed_observation = preprocess(observation)
@@ -114,11 +146,12 @@ def Pong_RL():
             obs_history.append(processed_observation)
             action_history.append(action)
 
-            observation, reward, terminated, truncated, info = env.step(action)
+            action_to_take = 2 if action == 0 else 3  # Remap the action index to the appropriate Pong-v0 action
+            observation, reward, terminated, truncated, info = env.step(action_to_take)
             
             reward_history.append(reward)
 
-        print("Finishing Game")
+        # print("Finishing Game", flush=True)
 
         discounted_rewards = compute_discounted_rewards(reward_history)
 
@@ -155,10 +188,10 @@ def Pong_RL():
             consecutive_21_rewards = 0  # Reset the counter if the reward is not 21
 
         # Modify the weight adjustment to respect the should_train flag
-        print("Starting Model Training")
+        # print("Starting Model Training", flush=True)
         if should_train:
             adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards)
-        print("Ending Model Training")
+        # print("Ending Model Training", flush=True)
 
         # Save the model every 100 iterations
         if episode % 100 == 0:
