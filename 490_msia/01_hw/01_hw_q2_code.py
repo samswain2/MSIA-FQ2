@@ -45,9 +45,9 @@ def build_model(input_shape=(80, 80, 1), num_choices=2, reg=0.0001):
 
 
 def select_action(model, observation):
-    probabilities = model.predict(tf.expand_dims(observation, axis=0), verbose=0)[0]
-    action_idx = np.random.choice([0, 1], p=probabilities)  # Choose between indices 0 and 1
-    return action_idx  # Return the selected action index (either 0 or 1)
+    probabilities = model(tf.expand_dims(observation, axis=0))[0].numpy()
+    action_idx = np.random.choice([0, 1], p=probabilities)
+    return action_idx
 
 
 def compute_discounted_rewards(reward_history, discount_factor=0.99):
