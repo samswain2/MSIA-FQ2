@@ -122,11 +122,26 @@ def save_plot(episode_rewards, episode):
     plt.close()
 
 def Pong_RL():
-    env = gym.make("Pong-v0")
+    env = gym.make("Pong-v0", 
+                #    render_mode="human"
+                   )
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
-    model = build_model()
+
+    iter_number = 700
+    model_path = f"saved_model/pong_model_{iter_number}"  # Adjust this to your specific model path
+
+    # Attempt to load the model
+    if os.path.exists(model_path):
+        print("Loading existing model from", model_path, flush=True)
+        model = tf.keras.models.load_model(model_path)
+    else:
+        print("Building a new model", flush=True)
+        model = build_model()
+
+    # model = build_model()
+    model.summary()
     episode_rewards = []
-    episode = 0 
+    episode = iter_number
 
     consecutive_21_rewards = 0  # Count number of 21 occurences
     should_train = True  # Initialize flag for training
@@ -158,7 +173,7 @@ def Pong_RL():
         total_reward = sum(reward_history)
         episode_rewards.append(total_reward)
 
-        moving_num, window = 0, 100
+        moving_num, window = 20, 100
         if episode >= window-1:
             moving_avg = np.mean(episode_rewards[-window:])
             print(f"Pong-v0 episode {episode}, reward sum: {total_reward}, last {window} avg: {moving_avg:.2f}", flush=True)

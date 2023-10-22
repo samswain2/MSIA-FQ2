@@ -7,3 +7,10 @@ my_credentials.txt
 
 # Cache
 __pycache__/
+
+# Data
+data/
+*.vec
+text_data.pkl
+text_embed_layer.pkl
+text_test_data.pkl
