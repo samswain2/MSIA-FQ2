@@ -1,0 +1,15 @@
+Getting Input Data
+Product 1 can be made in plant 1,4
+Product 2 can be made in plant 1,2
+Product 3 can be made in plant 2,3
+Product 4 can be made in plant 3,4
+Testing Input Data
+Building the Model
+Status:Optimal
+Total Demand:1545308.0
+Objective: 129650848.00766508
+Run Time in seconds 9.3
+Percent Demand served within 200 miles : 25.0
+Percent Demand served within 400 miles : 62.4
+Percent Demand served within 800 miles : 83.0
+Percent Demand served within 1600 miles : 100.0
