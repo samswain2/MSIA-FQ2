@@ -62,8 +62,8 @@ def build_model(input_shape=(80, 80, 1), num_choices=2, reg=0.0001):
     
     # Convolutional layers
     x = tf.keras.layers.Conv2D(32, (8, 8), strides=(4, 4), activation='relu')(input_layer)
-    # x = tf.keras.layers.Conv2D(64, (4, 4), strides=(2, 2), activation='relu')(x)
-    # x = tf.keras.layers.Conv2D(64, (3, 3), strides=(1, 1), activation='relu')(x)
+    x = tf.keras.layers.Conv2D(64, (4, 4), strides=(2, 2), activation='relu')(x)
+    x = tf.keras.layers.Conv2D(64, (3, 3), strides=(1, 1), activation='relu')(x)
     
     x = tf.keras.layers.Flatten()(x)
     
