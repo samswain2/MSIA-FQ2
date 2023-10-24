@@ -191,11 +191,11 @@ def Pong_RL():
                    )
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
-    iter_number = 1900
+    iter_number = 2000
 
     ### Code below will load existing model in
 
-    model_path = f"saved_model/pong_model_submission"  # Adjust this to your specific model path
+    model_path = f"saved_model/pong_model_{iter_number}"  # Adjust this to your specific model path
 
     # Attempt to load the model
     if os.path.exists(model_path):
@@ -277,7 +277,8 @@ def Pong_RL():
 
         # Save the model every 100 iterations
         if episode % 100 == 0:
-            model.save(f"saved_model/pong_model_{episode}")
+            # model.save(f"saved_model/pong_model_{episode}")
+            pass
             
         # Save a reward plot every 10 iterations with the same name
         if episode % 10 == 0:

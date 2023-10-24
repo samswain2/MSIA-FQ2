@@ -17,10 +17,10 @@ def check_gpu_availability():
     else:
         print("GPU is not available")
 
-def build_model(input_shape=(4,), num_choices=2, reg=0.0001):
+def build_model(input_shape=(4,), num_choices=2, reg=0.00001):
     input_layer = tf.keras.layers.Input(shape=input_shape)
-    x = tf.keras.layers.Dense(256, activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg))(input_layer)
-    x = tf.keras.layers.Dense(128, activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg))(x)
+    x = tf.keras.layers.Dense(64, activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg))(input_layer)
+    # x = tf.keras.layers.Dense(128, activation="relu", kernel_regularizer=tf.keras.regularizers.l2(reg))(x)
     action_probs = tf.keras.layers.Dense(num_choices, activation="softmax", name='action')(x)
     value_function = tf.keras.layers.Dense(1, name='value')(x)
     
@@ -69,7 +69,7 @@ def adjust_weights(model, optimizer, obs_history, action_history, discounted_rew
         chosen_probs = tf.gather_nd(action_probs, indices)
         
         loss_policy = -tf.math.log(chosen_probs) * adjusted_discounted_rewards
-        loss_value = tf.square(values - discounted_rewards)
+        loss_value = tf.sqrt(tf.square(values - discounted_rewards))
         
         loss = tf.reduce_mean(loss_policy + loss_value)
         
@@ -92,7 +92,7 @@ def CartPole_RL():
     env = gym.make("CartPole-v0", 
                 #    render_mode="human"
                    )
-    optimizer = tf.keras.optimizers.Adam(learning_rate=0.0005)
+    optimizer = tf.keras.optimizers.Adam(learning_rate=0.01)
     model = build_model()
     episode_rewards = []
     episode = 0
@@ -134,7 +134,7 @@ def CartPole_RL():
 
         ### TESTING PLOT AND SAVE FUNCTIONALITY
         # Add code here to plot every 10 episodes
-        if episode % 10 == 0:
+        if episode % 25 == 0:
             plot_rewards(episode_rewards)
 
         # Add code here to save the model every 100 episodes
