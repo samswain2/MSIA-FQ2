@@ -193,21 +193,21 @@ def Pong_RL():
                    )
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
-    iter_number = 0
+    iter_number = 1600
 
     ### Code below will load existing model in
 
-    # model_path = f"saved_model/pong_model_{iter_number}"  # Adjust this to your specific model path
+    model_path = f"saved_model/pong_model_{iter_number}"  # Adjust this to your specific model path
 
-    # # Attempt to load the model
-    # if os.path.exists(model_path):
-    #     print("Loading existing model from", model_path, flush=True)
-    #     model = tf.keras.models.load_model(model_path)
-    # else:
-    #     print("Building a new model", flush=True)
-    #     model = build_model()
+    # Attempt to load the model
+    if os.path.exists(model_path):
+        print("Loading existing model from", model_path, flush=True)
+        model = tf.keras.models.load_model(model_path)
+    else:
+        print("Building a new model", flush=True)
+        model = build_model()
 
-    model = build_model()
+    # model = build_model()
     model.summary()
     episode_rewards = []
     episode = iter_number
