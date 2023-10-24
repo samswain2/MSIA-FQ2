@@ -16,13 +16,11 @@ def check_gpu_availability():
             print(f"GPU device: {gpu}", flush=True)
             tf.config.experimental.set_memory_growth(gpu, True)
 
-        os.environ["CUDA_VISIBLE_DEVICES"] = "0" # Set the second GPU as available
+        # os.environ["CUDA_VISIBLE_DEVICES"] = "0" # Set the second GPU as available #
         os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2" # Filter out warnings
 
     else:
         print("GPU is not available", flush=True)
-
-check_gpu_availability()
 
 def preprocess(image, downsample_factor=2):
     """ prepro 210x160x3 uint8 frame into 6400 (80x80) 2D float array """
@@ -62,8 +60,8 @@ def build_model(input_shape=(80, 80, 1), num_choices=2, reg=0.0001):
     
     # Convolutional layers
     x = tf.keras.layers.Conv2D(32, (8, 8), strides=(4, 4), activation='relu')(input_layer)
-    x = tf.keras.layers.Conv2D(64, (4, 4), strides=(2, 2), activation='relu')(x)
-    x = tf.keras.layers.Conv2D(64, (3, 3), strides=(1, 1), activation='relu')(x)
+    # x = tf.keras.layers.Conv2D(64, (4, 4), strides=(2, 2), activation='relu')(x)
+    # x = tf.keras.layers.Conv2D(64, (3, 3), strides=(1, 1), activation='relu')(x)
     
     x = tf.keras.layers.Flatten()(x)
     
@@ -193,11 +191,11 @@ def Pong_RL():
                    )
     optimizer = tf.keras.optimizers.Adam(learning_rate=0.001)
 
-    iter_number = 1600
+    iter_number = 1900
 
     ### Code below will load existing model in
 
-    model_path = f"saved_model/pong_model_{iter_number}"  # Adjust this to your specific model path
+    model_path = f"saved_model/pong_model_submission"  # Adjust this to your specific model path
 
     # Attempt to load the model
     if os.path.exists(model_path):
