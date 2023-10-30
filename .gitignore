@@ -13,4 +13,15 @@ data/
 *.vec
 text_data.pkl
 text_embed_layer.pkl
+text_train_data.pkl
 text_test_data.pkl
+test_labels.csv
+test_labels.csv.zip
+test.csv
+test.csv.zip
+train.csv
+train.csv.zip
+tc_train.csv
+tc_test.csv
+best_model_WOW.h5
+submission.csv
