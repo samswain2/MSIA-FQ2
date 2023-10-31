@@ -27,18 +27,11 @@ def build_model(input_shape=(4,), num_choices=2, reg=0.00001):
     model = tf.keras.Model(inputs=input_layer, outputs=[action_probs, value_function])
     return model
 
-
-# def select_action(model, observation, num_choices=2):
-#     action_probs, _ = model.predict(np.array([observation]), verbose=0)
-#     # print(action_probs)
-#     return np.random.choice(num_choices, p=action_probs[0])
-
 def select_action(model, observation, num_choices=2):
     action_probs, _ = model(np.array([observation]))
     action_probs = action_probs.numpy()
     # print(action_probs)
     return np.random.choice(num_choices, p=action_probs[0])
-
 
 def compute_discounted_rewards(reward_history, discount_factor=0.95):
     discounted_rewards, cumulative_reward = [], 0
@@ -46,16 +39,6 @@ def compute_discounted_rewards(reward_history, discount_factor=0.95):
         cumulative_reward = reward + discount_factor * cumulative_reward
         discounted_rewards.insert(0, cumulative_reward)
     return discounted_rewards
-
-# def adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards):
-#     with tf.GradientTape() as tape:
-#         probs=model(np.array(obs_history))
-        # indices=tf.stack([tf.range(len(action_history), dtype=tf.int32), tf.convert_to_tensor(action_history, dtype=tf.int32)], axis=1)
-#         chosen_probs=tf.gather_nd(probs,indices)
-#         loss=-tf.math.log(chosen_probs)*discounted_rewards
-#         loss=tf.reduce_mean(loss)
-#     grads=tape.gradient(loss,model.trainable_variables)
-#     optimizer.apply_gradients(zip(grads,model.trainable_variables))
 
 def adjust_weights(model, optimizer, obs_history, action_history, discounted_rewards):
     with tf.GradientTape() as tape:
