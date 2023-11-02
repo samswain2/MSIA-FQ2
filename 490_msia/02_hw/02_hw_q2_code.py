@@ -15,17 +15,38 @@ warnings.filterwarnings("ignore", category=DeprecationWarning)
 # Get current directory
 script_dir = os.path.dirname(os.path.abspath(__file__))
 
-def check_gpu_availability():
+# def check_gpu_availability():
+#     # List all GPUs available to TensorFlow
+#     gpus = tf.config.list_physical_devices('GPU')
+
+#     # Check if any GPUs are available
+#     if len(gpus) > 0:
+#         print("GPU is available")
+#         for gpu in gpus:
+#             print(f"GPU device: {gpu}")
+#     else:
+#         print("GPU is not available")
+
+def check_gpu_availability(use_gpus=None):
     # List all GPUs available to TensorFlow
     gpus = tf.config.list_physical_devices('GPU')
 
     # Check if any GPUs are available
     if len(gpus) > 0:
-        print("GPU is available")
-        for gpu in gpus:
-            print(f"GPU device: {gpu}")
+        print("GPUs available:", gpus)
+        if use_gpus is not None:
+            # Set TensorFlow to only use the specified GPUs
+            try:
+                # Specify which GPUs to use
+                tf.config.set_visible_devices([gpus[i] for i in use_gpus], 'GPU')
+                logical_gpus = tf.config.list_logical_devices('GPU')
+                print(len(gpus), "Physical GPUs,", len(logical_gpus), "Logical GPUs")
+            except RuntimeError as e:
+                # Visible devices must be set before GPUs have been initialized
+                print(e)
     else:
-        print("GPU is not available")
+        print("GPU is not available, using CPU instead.")
+
 
 # Preprocess Mrs. Packman Frames
 mspacman_color = 210 + 164 + 74
@@ -69,7 +90,7 @@ def adjust_weights(model, target_model, optimizer, states, actions, rewards, nex
         # print(f"Action Mask: {action_mask}")
         predicted_q_values = tf.reduce_sum(q_values * action_mask, axis=1)
         # print(f"Predicted Q Values: {predicted_q_values}")
-        loss = tf.reduce_sum(tf.square(target_q_values - predicted_q_values))
+        loss = tf.reduce_mean(tf.square(target_q_values - predicted_q_values))
         print(f"loss: {loss}")
         
     gradients = tape.gradient(loss, model.trainable_variables)
@@ -238,5 +259,5 @@ def MsPacman_RL():
     plot_rewards(actual_episode_rewards, episode_max_q_values)
     
 if __name__=="__main__":
-    check_gpu_availability()
+    check_gpu_availability(use_gpus=[1])
     MsPacman_RL()
