@@ -203,7 +203,7 @@ def MsPacman_RL():
             processed_observation = processed_next_observation # Push next state to front
 
         # Record max Q-Values
-        max_q_value = max(accumulated_q_values) if accumulated_q_values else 0
+        max_q_value = np.mean(accumulated_q_values) if accumulated_q_values else 0
         episode_max_q_values.append(max_q_value)
 
         # Post-episode updates
