@@ -6,6 +6,7 @@ import gym
 import matplotlib.pyplot as plt
 import numpy as np
 import tensorflow as tf
+import csv
 
 class MsPacmanAgent:
 
@@ -44,6 +45,8 @@ class MsPacmanAgent:
         self.entropy_beta = config.get('entropy_beta', 0.01)
         self.update_target_every = config.get('update_target_every', 10)
         self.survival_factor = self.config.get('survival_factor', 0.01)
+        self.delta = self.config.get('huber_delta', 1.0)
+        self.clip_norm = self.config.get('clip_norm', 1.0)
 
         # Epsilon parameters for epsilon-greedy policy
         self.epsilon = config.get('epsilon', 1.0)
@@ -65,6 +68,10 @@ class MsPacmanAgent:
         self.actual_episode_rewards = []
         self.episode_max_q_values = []
         self.episode_q_values = []
+        self.episode_lengths = []
+        self.gradient_norms = []
+        self.entropy_history = []
+        self.action_distribution = np.zeros(self.num_actions)
 
         # Training control variables
         self.episode = 0
@@ -129,7 +136,7 @@ class MsPacmanAgent:
 
         return model
 
-    def adjust_weights(self, model, target_model, optimizer, states, actions, rewards, next_states, dones, discount_factor, num_actions, entropy_beta):
+    def adjust_weights(self, model, target_model, optimizer, states, actions, rewards, next_states, dones, discount_factor, num_actions, entropy_beta, delta, clip_norm):
         states, next_states = tf.convert_to_tensor(states, dtype=tf.float32), tf.convert_to_tensor(next_states, dtype=tf.float32)
         rewards, dones, actions = tf.convert_to_tensor(rewards, dtype=tf.float32), tf.convert_to_tensor(dones, dtype=tf.float32), tf.convert_to_tensor(actions, dtype=tf.int32)
         
@@ -145,10 +152,20 @@ class MsPacmanAgent:
             action_log_probs = tf.math.log(action_probs + 1e-5)
             entropy = -tf.reduce_sum(action_probs * action_log_probs, axis=-1)
             entropy_bonus = entropy_beta * entropy
-            loss = tf.reduce_mean(tf.square(target_q_values - predicted_q_values) - entropy_bonus)
+            self.entropy_history.append(tf.reduce_mean(entropy).numpy())
+
+            # Huber loss calculation
+            huber_loss = tf.keras.losses.Huber(delta=delta)
+            loss_per_example = huber_loss(target_q_values, predicted_q_values)
+            adjusted_loss_per_example = loss_per_example - entropy_bonus
+            loss = tf.reduce_mean(adjusted_loss_per_example)
             print(f"loss: {loss}")
             
         gradients = tape.gradient(loss, model.trainable_variables)
+        gradient_norms = [tf.norm(g).numpy() for g in gradients]  # Calculate norms of gradients
+        average_gradient_norm = np.mean(gradient_norms)  # Compute average gradient norm
+        self.gradient_norms.append(average_gradient_norm)  # Log the average gradient norm
+        gradients = [tf.clip_by_norm(g, clip_norm) for g in gradients] # Apply gradient clipping
         optimizer.apply_gradients(zip(gradients, model.trainable_variables))
 
     def select_action(self, model, state, epsilon, num_actions):
@@ -209,6 +226,38 @@ class MsPacmanAgent:
         else:
             self.model.save(os.path.join(saved_model_path, f"{model_name}_{self.episode}"))
 
+    def save_metrics(self, filename, episode, episode_metrics, all_q_values):
+        # Convert all Q-values to a string, separating Q-values by commas and actions by semicolons
+        all_q_values_str = ';'.join([','.join(map(str, q)) if not isinstance(q, str) else q for q in all_q_values])
+
+        # Check if it's the first episode and the file exists, then remove it
+        if episode == 0 and os.path.isfile(filename):
+            os.remove(filename)
+        
+        file_exists = os.path.isfile(filename)
+
+        with open(filename, 'a', newline='') as csvfile:
+            headers = [
+                'episode',           # Identifier of the episode
+                'epsilon',           # Parameter that might define the behavior policy in a learning algorithm
+                'actions',           # Outcome: What actions were taken
+                'episode_length',    # Outcome: Duration or length of the episode
+                'sum_reward',        # Outcome: Total reward accumulated in the episode
+                'average_q_value',   # Performance metric: Average of the Q values
+                'average_gradient_norm', # Performance metric: Average norm of the gradients
+                'average_entropy',   # Performance metric: Average entropy, indicating randomness of action selection
+                'all_q_values'       # Detailed log: All Q values for all actions taken, for deeper analysis
+            ]
+            writer = csv.DictWriter(csvfile, fieldnames=headers, quoting=csv.QUOTE_NONNUMERIC)
+
+            if not file_exists:
+                writer.writeheader()  # Write the header only once
+
+            # Include the more variables in the metrics to be written
+            episode_metrics['episode'] = episode
+            episode_metrics['all_q_values'] = all_q_values_str
+            writer.writerow(episode_metrics)
+
     def train_agent(self):
         """
         Main function to train the MsPacman agent using reinforcement learning.
@@ -220,11 +269,11 @@ class MsPacmanAgent:
             obs_history, reward_history, action_history = [], [], []
             actual_reward = []
             all_q_values = []
-            terminated = False
-            truncated = False
-
             accumulated_q_values = []
             self.step_counter = 0
+            
+            terminated = False
+            truncated = False
 
             # Episode loop
             while not terminated and not truncated:
@@ -237,6 +286,7 @@ class MsPacmanAgent:
                     all_q_values.append("Random action")
                 obs_history.append(processed_observation)
                 action_history.append(action)
+                self.action_distribution[action] += 1
 
                 # Step to next environment
                 next_observation, reward, terminated, truncated, info = self.env.step(action)
@@ -255,16 +305,6 @@ class MsPacmanAgent:
             # Record max Q-Values
             max_q_value = np.mean(accumulated_q_values) if accumulated_q_values else 0
             self.episode_max_q_values.append(max_q_value)
-
-            # Save all Q-values to a text file every 10 episodes
-            if self.episode % 10 == 0:
-                with open(self.q_values_filename, 'a') as file:
-                    file.write(f'Episode {self.episode}:\n')
-                    for iteration, q_values in enumerate(all_q_values):
-                        action = action_history[iteration]
-                        q_values_str = ' '.join(map(str, q_values)) if not isinstance(q_values, str) else q_values
-                        file.write(f'Iteration {iteration}: Action: {action}, Q-values: {q_values_str}\n')
-                    file.write('\n')
 
             # Post-episode updates
             total_actual_reward = sum(actual_reward)
@@ -285,7 +325,8 @@ class MsPacmanAgent:
                 self.adjust_weights(
                     self.model, self.target_model, self.optimizer, 
                     states, actions, rewards, next_states, dones, 
-                    self.discount_factor, self.num_actions, self.entropy_beta
+                    self.discount_factor, self.num_actions, self.entropy_beta,
+                    delta=self.delta, clip_norm=self.clip_norm
                     )
 
             # Update the target network
@@ -296,6 +337,20 @@ class MsPacmanAgent:
             average_q_value = np.mean(accumulated_q_values) if accumulated_q_values else 0
             self.episode_q_values.append(average_q_value)
 
+            episode_metrics = {
+                'sum_reward': np.sum(actual_reward),
+                'average_q_value': np.mean(accumulated_q_values) if accumulated_q_values else 0,
+                'average_gradient_norm': self.gradient_norms[-1],
+                'average_entropy': self.entropy_history[-1],
+                'epsilon': self.epsilon,
+                'episode_length': self.step_counter,
+                'actions': action_history
+            }
+
+            # Call the save_metrics method and pass all_q_values list
+            self.save_metrics('training_metrics.csv', self.episode, episode_metrics, all_q_values)
+
+            self.episode_lengths.append(self.step_counter)
             self.episode += 1
 
         self.env.close()
@@ -312,7 +367,7 @@ if __name__ == "__main__":
         'q_values_filename': 'mspacman_q_values.txt',  # File name for saving Q-values
         'use_gpus': [1], # List of GPU indices to use
         'num_actions': 9,  # Number of possible actions in the environment (should match the environment's action space)
-        'learning_rate': 1e-5,  # Learning rate for the optimizer
+        'learning_rate': 1e-7,  # Learning rate for the optimizer
         'buffer_size': 100000,  # Maximum size of the replay buffer
         'batch_size': 256,  # Size of the batch when sampling from the replay buffer
         'discount_factor': 0.99,  # Discount factor for future rewards
@@ -321,7 +376,9 @@ if __name__ == "__main__":
         'epsilon_min': 0.1,  # Minimum value for epsilon
         'entropy_beta': 0.01,  # Scaling factor for the entropy bonus
         'survival_factor': 0.001, # Factor to calculate the reward based on survival time
-        'update_target_every': 10,  # Number of episodes between updating the target network
+        'huber_delta': 1.0,  # The delta value for the Huber loss, adjust as needed
+        'clip_norm': 1.0,  # The clip norm value for gradient clipping, adjust as needed
+        'update_target_every': 25,  # Number of episodes between updating the target network
         'average_window': 100,  # Window size for calculating the moving average of rewards
         'stopping_moving_average': 5000,  # Moving average threshold for stopping the training
         'plot_every': 2,  # Frequency (in episodes) for plotting the training progress

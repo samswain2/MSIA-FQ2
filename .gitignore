@@ -25,6 +25,7 @@ tc_train.csv
 tc_test.csv
 best_model_WOW.h5
 submission.csv
+training_metrics.csv
 
 # Folders
 saved_model/

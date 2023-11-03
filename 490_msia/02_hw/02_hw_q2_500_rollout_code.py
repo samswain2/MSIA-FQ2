@@ -46,10 +46,6 @@ def preprocess_observation(obs):
     img = (img / 255.0).astype(np.float32)  # Normalize between 0 and 1
     return img.reshape(88, 80, 1)
 
-# Transform reward
-def transform_reward(reward):
-    return reward
-
 # Select agent's action
 def select_action(model, state, epsilon, num_actions):
     if random.random() < epsilon:
@@ -96,7 +92,6 @@ def MsPacman_RL(model_path, rollout_len=500):
         )
     trained_model = tf.keras.models.load_model(model_path)
     num_actions = 9
-    transformed_episode_rewards = []
     actual_episode_rewards = []
     epsilon = 0
 
@@ -107,7 +102,6 @@ def MsPacman_RL(model_path, rollout_len=500):
     for episode in range(1, rollout_len+1):
         observation, info = env.reset()
         processed_observation = preprocess_observation(observation)
-        obs_history, reward_history, action_history = [], [], []
         actual_reward = []
         terminated = False
         truncated = False
@@ -116,25 +110,20 @@ def MsPacman_RL(model_path, rollout_len=500):
         while not terminated and not truncated:
             # Epsilon-greedy action selection
             action, q_value = select_action(trained_model, processed_observation, epsilon, num_actions=num_actions)
-            obs_history.append(processed_observation)
-            action_history.append(action)
+            print(action)
 
             # Step to next environment
             next_observation, reward, terminated, truncated, info = env.step(action)
             actual_reward.append(reward)  # Accumulate the actual reward
-            reward = transform_reward(reward) # Transform the reward here
             processed_next_observation = preprocess_observation(next_observation)  # Preprocess the new observation
-            reward_history.append(reward)
 
             processed_observation = processed_next_observation # Push next state to front
 
         # Post-episode updates
         total_actual_reward = sum(actual_reward)
         actual_episode_rewards.append(total_actual_reward)
-        total_transformed_reward = round(sum(reward_history), 4)
-        transformed_episode_rewards.append(total_transformed_reward)
 
-        print(f"MsPacman-v0 episode {episode}, transformed reward sum: {total_transformed_reward}, reward sum: {total_actual_reward}")
+        print(f"MsPacman-v0 episode {episode}, reward sum: {total_actual_reward}")
 
         # Plot and save functionality
         plot_rewards(actual_episode_rewards)
@@ -146,5 +135,6 @@ def MsPacman_RL(model_path, rollout_len=500):
     
 if __name__=="__main__":
     check_gpu_availability(use_gpus=[0])
-    model_path = os.path.join(script_dir, 'saved_model', 'mspacman_model_900')
+    model_number = 700
+    model_path = os.path.join(script_dir, 'saved_model', f'mspacman_model_{model_number}')
     MsPacman_RL(model_path)
