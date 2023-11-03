@@ -248,14 +248,14 @@ class MsPacmanAgent:
                 'average_entropy',   # Performance metric: Average entropy, indicating randomness of action selection
                 'all_q_values'       # Detailed log: All Q values for all actions taken, for deeper analysis
             ]
-            writer = csv.DictWriter(csvfile, fieldnames=headers, quoting=csv.QUOTE_NONNUMERIC)
+            writer = csv.DictWriter(csvfile, fieldnames=headers, quoting=csv.QUOTE_MINIMAL)
 
             if not file_exists:
                 writer.writeheader()  # Write the header only once
 
             # Include the more variables in the metrics to be written
             episode_metrics['episode'] = episode
-            episode_metrics['all_q_values'] = all_q_values_str
+            episode_metrics['all_q_values'] = '"' + all_q_values_str.replace('"', '""') + '"'
             writer.writerow(episode_metrics)
 
     def train_agent(self):
