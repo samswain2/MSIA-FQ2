@@ -367,22 +367,23 @@ if __name__ == "__main__":
         'q_values_filename': 'mspacman_q_values.txt',  # File name for saving Q-values
         'use_gpus': [1], # List of GPU indices to use
         'num_actions': 9,  # Number of possible actions in the environment (should match the environment's action space)
-        'learning_rate': 1e-7,  # Learning rate for the optimizer
+        'learning_rate': 1e-5,  # Learning rate for the optimizer
         'buffer_size': 100000,  # Maximum size of the replay buffer
-        'batch_size': 256,  # Size of the batch when sampling from the replay buffer
+        'batch_size': 512,  # Size of the batch when sampling from the replay buffer
         'discount_factor': 0.99,  # Discount factor for future rewards
         'epsilon_start': 1.0,  # Starting value for epsilon in the epsilon-greedy policy
-        'epsilon_decay': 0.998,  # Decay rate for epsilon after each episode
-        'epsilon_min': 0.1,  # Minimum value for epsilon
+        'epsilon_decay': 0.999,  # Decay rate for epsilon after each episode
+        'epsilon_min': 0.025,  # Minimum value for epsilon
         'entropy_beta': 0.01,  # Scaling factor for the entropy bonus
-        'survival_factor': 0.001, # Factor to calculate the reward based on survival time
+        # 'survival_factor': 0.001, # Factor to calculate the reward based on survival time
+        'survival_factor': 0.000, # Factor to calculate the reward based on survival time
         'huber_delta': 1.0,  # The delta value for the Huber loss, adjust as needed
         'clip_norm': 1.0,  # The clip norm value for gradient clipping, adjust as needed
         'update_target_every': 25,  # Number of episodes between updating the target network
         'average_window': 100,  # Window size for calculating the moving average of rewards
         'stopping_moving_average': 5000,  # Moving average threshold for stopping the training
         'plot_every': 2,  # Frequency (in episodes) for plotting the training progress
-        'save_model_every': 100,  # Frequency (in episodes) for saving the model checkpoints
+        'save_model_every': 25,  # Frequency (in episodes) for saving the model checkpoints
         'print_model_summary': True,  # Whether to print the model summary
     }
     agent = MsPacmanAgent(config)

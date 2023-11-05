@@ -88,7 +88,7 @@ def MsPacman_RL(model_path, rollout_len=500):
     # Initialize environment and model
     env = gym.make(
         "MsPacman-v0", 
-        render_mode="human"
+        # render_mode="human"
         )
     trained_model = tf.keras.models.load_model(model_path)
     num_actions = 9
@@ -110,7 +110,7 @@ def MsPacman_RL(model_path, rollout_len=500):
         while not terminated and not truncated:
             # Epsilon-greedy action selection
             action, q_value = select_action(trained_model, processed_observation, epsilon, num_actions=num_actions)
-            print(action)
+            # print(action)
 
             # Step to next environment
             next_observation, reward, terminated, truncated, info = env.step(action)
@@ -135,6 +135,6 @@ def MsPacman_RL(model_path, rollout_len=500):
     
 if __name__=="__main__":
     check_gpu_availability(use_gpus=[0])
-    model_number = 700
-    model_path = os.path.join(script_dir, 'saved_model', f'mspacman_model_{model_number}')
+    model_number = 875
+    model_path = os.path.join(script_dir, 'saved_model', f'mspacman_model_{model_number}_{model_number}')
     MsPacman_RL(model_path)
