@@ -27,6 +27,7 @@ best_model_WOW.h5
 submission.csv
 training_metrics.csv
 training_metrics_epsilon_0_9995.csv
+Assignment3-data/
 
 # Folders
 saved_model/
