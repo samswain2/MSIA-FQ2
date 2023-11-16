@@ -34,7 +34,7 @@ class ModelEvaluator:
 
 # Configuration
 parallel = 'parallel'
-model_path = './saved_models/global_model_round_200.h5'  # Adjust as needed
+model_path = './saved_models/global_model_round_125.h5'  # Adjust as needed
 test_data_path = './Assignment3-data/test_data.npy'    # Adjust as needed
 output_file = './evaluation_results_regular.txt'               # Output file path
 
