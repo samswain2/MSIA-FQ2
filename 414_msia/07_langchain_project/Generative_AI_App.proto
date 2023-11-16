@@ -1,0 +1,25 @@
+// Generative_AI_App
+// 2023.10.10 m.a.
+// iLykei (c)
+
+syntax = "proto3";
+
+package Generative_AI_App;
+option optimize_for = SPEED;
+
+// Server -> Client.
+message ServerMsg {
+    optional uint64 question_id = 1;
+    optional string question    = 2;
+    optional bool   stream_end  = 3;
+    optional double penalty     = 4;
+    optional int64  score       = 5;
+    optional string error       = 6;
+}
+
+
+// Client -> Server.
+message AnswerMsg {
+    optional uint64 question_id = 1;
+    optional string answer      = 2;
+}

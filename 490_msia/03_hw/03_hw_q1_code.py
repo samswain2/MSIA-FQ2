@@ -24,11 +24,11 @@ class FederatedLearningManager:
 
         model = tf.keras.Sequential([
             tf.keras.layers.Flatten(input_shape=(28, 28)),
-            tf.keras.layers.Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.0001)),
+            tf.keras.layers.Dense(128, activation='relu', kernel_regularizer=tf.keras.regularizers.l2(0.001)),
             tf.keras.layers.Dense(62, activation='softmax')  # Output layer for 62 classes
         ])
 
-        model.compile(optimizer=tf.keras.optimizers.Adam(learning_rate=learning_rate),
+        model.compile(optimizer=tf.keras.optimizers.SGD(learning_rate=learning_rate),
                       loss='sparse_categorical_crossentropy',
                       metrics=['accuracy'])
         
@@ -64,21 +64,39 @@ class FederatedLearningManager:
         X_val = np.array(client_data['X_val'])
         y_val = np.array(client_data['y_val'])
 
-        history = model.fit(X_train, y_train, epochs=self.config['local_epochs'], batch_size=32, validation_data=(X_val, y_val), verbose=0)
+        history = model.fit(X_train, y_train, epochs=self.config['local_epochs'], batch_size=16, validation_data=(X_val, y_val), verbose=0)
 
         train_loss, train_accuracy = history.history['loss'][-1], history.history['accuracy'][-1]
         val_loss, val_accuracy = model.evaluate(X_val, y_val, verbose=0)
 
         return model.get_weights(), train_loss, train_accuracy, val_loss, val_accuracy, len(X_train)
 
+    # @staticmethod
+    # def average_weights(weights_list):
+    #     average_weights = []
+    #     num_layers = len(weights_list[0])
+    #     for layer in range(num_layers):
+    #         layer_weights = np.array([client_weights[layer] for client_weights in weights_list])
+    #         layer_average = np.mean(layer_weights, axis=0)
+    #         average_weights.append(layer_average)
+    #     return average_weights
+
     @staticmethod
-    def average_weights(weights_list):
+    def average_weights(weights_list, sample_sizes):
         average_weights = []
         num_layers = len(weights_list[0])
+
+        # Calculate the total number of samples
+        total_samples = sum(sample_sizes)
+
         for layer in range(num_layers):
-            layer_weights = np.array([client_weights[layer] for client_weights in weights_list])
-            layer_average = np.mean(layer_weights, axis=0)
-            average_weights.append(layer_average)
+            weighted_layer_sum = np.sum(
+                np.array([client_weights[layer] * sample_sizes[i] for i, client_weights in enumerate(weights_list)]), 
+                axis=0
+            )
+            weighted_layer_average = weighted_layer_sum / total_samples
+            average_weights.append(weighted_layer_average)
+        
         return average_weights
 
     def save_model(self, round):
@@ -132,6 +150,7 @@ class FederatedLearningManager:
         for round in range(self.config['communication_rounds']):
             selected_clients_indices = self.select_clients()
             weights_list = []
+            sample_sizes = []
             round_metrics = {'train_accuracy': 0, 'train_loss': 0, 'val_accuracy': 0, 'val_loss': 0, 'total_samples': 0}
 
             for client_id in selected_clients_indices:
@@ -140,6 +159,7 @@ class FederatedLearningManager:
                 client_weights, train_loss, train_accuracy, val_loss, val_accuracy, num_samples = self.client_update(local_model, self.client_train_val_data[client_id])
 
                 weights_list.append(client_weights)
+                sample_sizes.append(num_samples)
                 round_metrics['train_accuracy'] += train_accuracy * num_samples
                 round_metrics['train_loss'] += train_loss * num_samples
                 round_metrics['val_accuracy'] += val_accuracy * num_samples
@@ -147,7 +167,7 @@ class FederatedLearningManager:
                 round_metrics['total_samples'] += num_samples
 
             # Update global model with the average weights after all clients have been processed
-            updated_weights = self.average_weights(weights_list)
+            updated_weights = self.average_weights(weights_list, sample_sizes)
             self.global_model.set_weights(updated_weights)
             
             # Evaluate on test data after updating the global model
@@ -160,11 +180,12 @@ class FederatedLearningManager:
                 global_history[metric].append(round_metrics[metric] / round_metrics['total_samples'])
 
             # Print round summary after test evaluation
-            print(f'Round {round+1}, Train Loss: {global_history["train_loss"][-1]}, '
-                f'Train Accuracy: {global_history["train_accuracy"][-1]}, '
-                f'Validation Loss: {global_history["val_loss"][-1]}, '
-                f'Validation Accuracy: {global_history["val_accuracy"][-1]}, '
-                f'Test Loss: {test_loss}, Test Accuracy: {test_accuracy}')
+            print(f'Round {round+1}, Train Loss: {round(global_history["train_loss"][-1], 4)}, '
+                f'Train Accuracy: {round(global_history["train_accuracy"][-1], 4)}, '
+                f'Validation Loss: {round(global_history["val_loss"][-1], 4)}, '
+                f'Validation Accuracy: {round(global_history["val_accuracy"][-1], 4)}, '
+                f'Test Loss: {round(test_loss, 4)}, Test Accuracy: {round(test_accuracy, 4)}'
+                )
             
             # Save the model and plot at specified intervals
             if (round + 1) % self.config['save_interval'] == 0:
