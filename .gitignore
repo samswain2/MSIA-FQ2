@@ -4,6 +4,7 @@
 
 # Credentials
 my_credentials.txt
+OPENAI_KEY.txt
 
 # Cache
 __pycache__/
