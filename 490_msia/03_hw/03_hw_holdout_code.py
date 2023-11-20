@@ -84,7 +84,7 @@ if __name__ == "__main__":
         is_parallel = False
 
     # Define the client fractions and file naming based on the value of is_parallel
-    client_fractions = [0.04] if is_parallel else [0.025] # , 0.05, 0.075, 0.1
+    client_fractions = [0.04] if is_parallel else [0.025, 0.05, 0.075, 0.1]
     file_tag = 'parallel' if is_parallel else 'sequential'
     output_file = f'./evaluation_results_{file_tag}.txt'
     plot_file = f'./evaluation_plot_{file_tag}.png'
@@ -98,7 +98,7 @@ if __name__ == "__main__":
     # Evaluate each model
     evaluation_results = {}
     for fraction in client_fractions:
-        accuracy = evaluator.run_evaluation(fraction, output_file, iteration=300)
+        accuracy = evaluator.run_evaluation(fraction, output_file, iteration=1000)
         if accuracy is not None:
             evaluation_results[fraction] = accuracy
 

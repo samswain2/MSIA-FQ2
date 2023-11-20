@@ -3,6 +3,6 @@ Evaluation Results for Parallel-Trained Model - Client Fraction: 0.04
 =============================================
 Test Images Shape: (3621, 28, 28)
 Test Labels Shape: (3621,)
-Test Accuracy: 0.1279
+Test Accuracy: 0.6261
 ---------------------------------------------
 

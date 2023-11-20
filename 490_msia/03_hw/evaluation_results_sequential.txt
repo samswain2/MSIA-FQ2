@@ -3,6 +3,30 @@ Evaluation Results for Sequential-Trained Model - Client Fraction: 0.025
 =============================================
 Test Images Shape: (3621, 28, 28)
 Test Labels Shape: (3621,)
-Test Accuracy: 0.5463
+Test Accuracy: 0.5904
+---------------------------------------------
+
+=============================================
+Evaluation Results for Sequential-Trained Model - Client Fraction: 0.05
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.6018
+---------------------------------------------
+
+=============================================
+Evaluation Results for Sequential-Trained Model - Client Fraction: 0.075
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.6244
+---------------------------------------------
+
+=============================================
+Evaluation Results for Sequential-Trained Model - Client Fraction: 0.1
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.6269
 ---------------------------------------------
 
