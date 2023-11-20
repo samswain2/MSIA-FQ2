@@ -1,10 +1,12 @@
 # Envs
 .venv
 .venv311
+.venv_490
 
 # Credentials
 my_credentials.txt
 OPENAI_KEY.txt
+my_pinecone_key.txt
 
 # Cache
 __pycache__/

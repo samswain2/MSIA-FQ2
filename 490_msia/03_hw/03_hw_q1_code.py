@@ -74,16 +74,6 @@ class FederatedLearningManager:
 
         return model.get_weights(), train_loss, train_accuracy, val_loss, val_accuracy, len(X_train)
 
-    # @staticmethod
-    # def average_weights(weights_list):
-    #     average_weights = []
-    #     num_layers = len(weights_list[0])
-    #     for layer in range(num_layers):
-    #         layer_weights = np.array([client_weights[layer] for client_weights in weights_list])
-    #         layer_average = np.mean(layer_weights, axis=0)
-    #         average_weights.append(layer_average)
-    #     return average_weights
-
     @staticmethod
     def average_weights(weights_list, sample_sizes):
         average_weights = []
@@ -184,7 +174,7 @@ class FederatedLearningManager:
                 f'Validation Loss: {round(global_history["val_loss"][-1], 4)}, '
                 f'Validation Accuracy: {round(global_history["val_accuracy"][-1], 4)}'
                 )
-            
+                
             # Save the model and plot at specified intervals
             if (iteration + 1) % self.config['save_interval'] == 0:
                 self.save_model(iteration)
@@ -198,10 +188,10 @@ base_config = {
     'communication_rounds': 1000,
     'local_epochs': 20,
     'learning_rate': 0.001,  # Specify the learning rate
-    'save_interval': 50,  # Save model and plot every 5 rounds
+    'save_interval': 100,  # Save model and plot every 5 rounds
     'model_save_dir': './saved_models',  # Directory to save models
     'plot_save_dir': './training_plots',  # Directory to save plots
-    'gpu_id': 1  # Specify which GPU to use
+    'gpu_id': 0  # Specify which GPU to use
 }
 
 # Client fractions to try
@@ -238,5 +228,4 @@ for fraction in client_fractions:
 # Output final results
 for fraction, results in final_results.items():
     print(f"Results for client fraction {fraction}:")
-    print(f"Training History: {results['history']}")
     
