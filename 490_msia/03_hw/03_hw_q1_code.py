@@ -97,9 +97,9 @@ class FederatedLearningManager:
         self.global_model.save(model_path)
         print(f'Model saved at {model_path}')
 
-    def plot_progress(self, history, iteration, client_fraction):
+    def plot_progress(self, history, iteration, client_fraction, local_epochs):
         plt.figure(figsize=(12, 10))
-        plt.suptitle(f'Client Fraction: {client_fraction}', fontsize=14)
+        plt.suptitle(f'Client Fraction: {client_fraction}, Local Epochs: {local_epochs}', fontsize=14)
 
         plt.subplot(2, 2, 1)
         plt.plot(range(1, iteration + 2), history['train_accuracy'], label='Train Accuracy')
@@ -130,7 +130,7 @@ class FederatedLearningManager:
         plt.legend()
 
         plt.tight_layout()
-        plot_path = os.path.join(self.config['plot_save_dir'], f'training_progress_round_{iteration+1}.png')
+        plot_path = os.path.join(self.config['plot_save_dir'], f'training_progress_round_{iteration+1}_epochs_{local_epochs}.png')
         plt.savefig(plot_path)
         print(f'Progress plot saved at {plot_path}')
         plt.close()
@@ -178,14 +178,14 @@ class FederatedLearningManager:
             # Save the model and plot at specified intervals
             if (iteration + 1) % self.config['save_interval'] == 0:
                 self.save_model(iteration)
-                self.plot_progress(global_history, iteration, self.config['client_fraction'])
+                self.plot_progress(global_history, iteration, self.config['client_fraction'], self.config['local_epochs'])
                 
         return self.global_model, global_history
 
 #  Configuration settings common to all runs
 base_config = {
     'train_data_path': "./Assignment3-data/train_data.npy",
-    'communication_rounds': 1000,
+    'communication_rounds': 100,
     'local_epochs': 20,
     'learning_rate': 0.001,  # Specify the learning rate
     'save_interval': 100,  # Save model and plot every 5 rounds
@@ -194,38 +194,37 @@ base_config = {
     'gpu_id': 0  # Specify which GPU to use
 }
 
-# Client fractions to try
+# Client fractions and local epochs to try
 client_fractions = [0.025, 0.05, 0.075, 0.1]
+local_epoch_values = [10, 20]
 
-# Dictionary to store final results for each client fraction
+# Dictionary to store final results for each setting
 final_results = {}
 
-# Loop over each client fraction
+# Loop over each client fraction and each local epoch value
 for fraction in client_fractions:
-    # Update client fraction in configuration
-    config = base_config.copy()
-    config['client_fraction'] = fraction
+    for local_epochs in local_epoch_values:
+        # Update client fraction and local epochs in configuration
+        config = base_config.copy()
+        config['client_fraction'] = fraction
+        config['local_epochs'] = local_epochs
 
-    # Update directories to include client fraction
-    fraction_dir = f'fraction_{fraction}'
-    config['model_save_dir'] = os.path.join('./saved_models', fraction_dir)
-    config['plot_save_dir'] = os.path.join('./training_plots', fraction_dir)
+        # Update directories to include client fraction and local epochs
+        fraction_epoch_dir = f'fraction_{fraction}_epochs_{local_epochs}'
+        config['model_save_dir'] = os.path.join('./saved_models', fraction_epoch_dir)
+        config['plot_save_dir'] = os.path.join('./training_plots', fraction_epoch_dir)
 
-    # Ensure directories exist
-    os.makedirs(config['model_save_dir'], exist_ok=True)
-    os.makedirs(config['plot_save_dir'], exist_ok=True)
+        # Ensure directories exist
+        os.makedirs(config['model_save_dir'], exist_ok=True)
+        os.makedirs(config['plot_save_dir'], exist_ok=True)
 
-    # Initialize and run federated learning
-    fl_manager = FederatedLearningManager(config)
-    global_model, training_history = fl_manager.federated_training()
+        # Initialize and run federated learning
+        fl_manager = FederatedLearningManager(config)
+        global_model, training_history = fl_manager.federated_training()
 
-    # Store the final results
-    final_results[fraction] = {
-        'model': global_model,
-        'history': training_history
-    }
-
-# Output final results
-for fraction, results in final_results.items():
-    print(f"Results for client fraction {fraction}:")
+        # Store the final results
+        final_results[(fraction, local_epochs)] = {
+            'model': global_model,
+            'history': training_history
+        }
     

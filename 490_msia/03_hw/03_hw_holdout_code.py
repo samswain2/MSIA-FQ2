@@ -25,8 +25,8 @@ class ModelEvaluator:
         test_accuracy = correct_predictions / len(test_labels)
         return test_accuracy
 
-    def run_evaluation(self, fraction, output_file, iteration):
-        model_path = f"{self.model_dir}/fraction_{fraction}/global_model_round_{iteration}.h5"
+    def run_evaluation(self, fraction, local_epochs, output_file, iteration):
+        model_path = f"{self.model_dir}/fraction_{fraction}_epochs_{local_epochs}/global_model_round_{iteration}.h5"
         if not tf.io.gfile.exists(model_path):
             print(f"Model file not found: {model_path}")
             return None
@@ -83,6 +83,9 @@ if __name__ == "__main__":
     else:
         is_parallel = False
 
+    # Define the local epoch values to evaluate
+    local_epoch_values = [20]
+
     # Define the client fractions and file naming based on the value of is_parallel
     client_fractions = [0.04] if is_parallel else [0.025, 0.05, 0.075, 0.1]
     file_tag = 'parallel' if is_parallel else 'sequential'
@@ -95,12 +98,13 @@ if __name__ == "__main__":
     # Clear the output file
     open(output_file, 'w').close()
 
-    # Evaluate each model
+    # Evaluate each model for each local epoch value
     evaluation_results = {}
     for fraction in client_fractions:
-        accuracy = evaluator.run_evaluation(fraction, output_file, iteration=1000)
-        if accuracy is not None:
-            evaluation_results[fraction] = accuracy
+        for local_epochs in local_epoch_values:
+            accuracy = evaluator.run_evaluation(fraction, local_epochs, output_file, iteration=1000)
+            if accuracy is not None:
+                evaluation_results[(fraction, local_epochs)] = accuracy
 
-    # Plotting and saving the results
+    # Plotting and saving the results (if you want to adjust this for different epochs, let me know)
     plot_results(evaluation_results, plot_file)

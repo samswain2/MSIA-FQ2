@@ -34,5 +34,8 @@ Assignment3-data/
 
 # Folders
 saved_model/
-saved_models/
-saved_models_parallel/
+# saved_models/
+# saved_models_parallel/
+# saved_model_final/
+# saved_models_final/
+# saved_models_parallel_final/
