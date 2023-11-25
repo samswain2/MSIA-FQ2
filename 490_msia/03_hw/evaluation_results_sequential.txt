@@ -1,0 +1,32 @@
+=============================================
+Evaluation Results for Sequential-Trained Model - Noise Scale: 0.1
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.5661
+---------------------------------------------
+
+=============================================
+Evaluation Results for Sequential-Trained Model - Noise Scale: 0.2
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.5661
+---------------------------------------------
+
+=============================================
+Evaluation Results for Sequential-Trained Model - Noise Scale: 0.5
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.5139
+---------------------------------------------
+
+=============================================
+Evaluation Results for Sequential-Trained Model - Noise Scale: 1.0
+=============================================
+Test Images Shape: (3621, 28, 28)
+Test Labels Shape: (3621,)
+Test Accuracy: 0.2742
+---------------------------------------------
+

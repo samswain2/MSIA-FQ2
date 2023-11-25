@@ -1,2 +1,2 @@
-Mean Reward: 548.84
-Standard Deviation: 259.0209535925617
+Mean Reward: 540.0
+Standard Deviation: 130.0

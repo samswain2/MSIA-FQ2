@@ -88,7 +88,7 @@ def MsPacman_RL(model_path, rollout_len=500):
     # Initialize environment and model
     env = gym.make(
         "MsPacman-v0", 
-        # render_mode="human"
+        render_mode="human"
         )
     trained_model = tf.keras.models.load_model(model_path)
     num_actions = 9
