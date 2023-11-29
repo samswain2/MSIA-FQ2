@@ -7,6 +7,7 @@
 my_credentials.txt
 OPENAI_KEY.txt
 my_pinecone_key.txt
+.env
 
 # Cache
 __pycache__/

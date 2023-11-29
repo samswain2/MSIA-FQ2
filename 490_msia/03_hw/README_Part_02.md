@@ -15,6 +15,7 @@ The effect of noise scale $b$ on the model quality trained via FedAvg was explor
 3. Utilizing 10% of clients in each communication round for FedAvg.
 4. Plotting aggregated training and validation accuracy across communication rounds.
 5. Evaluating the trained model on held-out test data.
+6. Repeat for multiple noise values.
 
 ### Code Instructions
 
@@ -30,6 +31,8 @@ python310 homework_03_part_02/03_hw_02_part_code.py
 python310 homework_03_part_02/03_hw_02_part_holdout_code.py
 ```
 
+- Note: Before running each script, there are some settings you can adjust at the bottom. Please take a look at them before running. 
+
 ### Results
 
 #### Training Quality with Different Noise Scales
@@ -41,14 +44,20 @@ After careful analysis, a noise scale of **0.5** was found to best balance priva
 ### Plots and Evaluation Results
 The training progression and final model accuracy plots can be found below:
 
+**Training Plots for Different Noise Levels**
 ![Training Progression with Noise Scale 0.1](./03_hw_02_part_plots/training_progress_round_500_noise_0.1.png)
 ![Training Progression with Noise Scale 0.2](./03_hw_02_part_plots/training_progress_round_500_noise_0.2.png)
 ![Training Progression with Noise Scale 0.5](./03_hw_02_part_plots/training_progress_round_500_noise_0.5.png)
 ![Training Progression with Noise Scale 1.0](./03_hw_02_part_plots/training_progress_round_500_noise_1.0.png)
-![Model Accuracy by Noise Scale](./03_hw_02_part_plots/03_hw_02_part_evaluation_plot.png)
+
+**Evaluation Plots for Train and Test Sets**
+![Model Accuracy by Noise Scale](./03_hw_02_part_plots/evaluation_plot_sequential_training_data.png)
+![Model Accuracy by Noise Scale](./03_hw_02_part_plots/evaluation_plot_sequential_testing_data.png)
 
 The evaluation results are detailed in the attached text file:
 - [Evaluation Results Text File](./03_hw_02_part_plots/03_hw_02_part_evaluation_results.txt)
 
-### Conclusion
-The selected noise scale of **0.5** is recommended for its efficacy in maintaining a high quality of the trained model while providing differential privacy. The decision was based on the observed relationship between noise scale and accuracy, as demonstrated in the provided plots.
+## Analysis of Noise Scale Impact on Model Quality
+
+In the exploration of differential privacy within federated learning, the injection of noise into local training data has shown a clear trade-off between privacy and accuracy. The implementation of FedAvg to train a 2-layer neural network with varied noise scales demonstrated that as the noise scale \( b \) increased, the model's accuracy, both on training and testing datasets, tended to decrease. This trend is indicative of the expected degradation in model performance due to the introduction of noise. Notably, at lower noise scales \( b \leq 0.1 \), the model preserved a high degree of accuracy, suggesting that a minimal noise addition could be a viable strategy for privacy preservation without significant loss in model utility. Conversely, at higher noise scales \( b \geq 0.5 \), the accuracy dropped more steeply, reflecting the model's inability to learn effectively from heavily perturbed data. The accuracy plots across communication rounds indicated an earlier plateau for models trained with higher noise scales, possibly signifying early convergence due to noise-induced underfitting. Considering these findings, a noise scale at the lower end of the spectrum \( b \approx 0.3 \) to \( 0.5 \) might offer an optimal balance between data privacy and model accuracy.
+
