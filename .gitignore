@@ -32,6 +32,7 @@ submission.csv
 training_metrics.csv
 training_metrics_epsilon_0_9995.csv
 Assignment3-data/
+04_hw_data/
 
 # Folders
 saved_model/
