@@ -1,0 +1,3 @@
+Generation: 200
+Batch Size: 33
+Activation Function: tanh
