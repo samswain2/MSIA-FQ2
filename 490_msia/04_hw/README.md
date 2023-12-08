@@ -27,7 +27,7 @@ Two methods are used for hyperparameter tuning:
 - Mini-batch size (From 16 to 1024)
 - Activation function for the hidden layer (ReLU, Sigmoid, Tanh)
 
-Running the Code
+<u>Running the Code</u>
 1. Install the required packages from `requirements.txt`.
 2. You can either run the code for part 1 or 2:
 - Part 1: `python 04_hw_q1_code.py`
@@ -35,6 +35,7 @@ Running the Code
 3. Results will be displayed in the console and plots will be saved in the `artifacts` folder.
 
 ### Optimization Results
+
 **Training Plots:**
 Genetic Algorithm
 ![Genetic Algorithm Training](artifacts/plots/fitness_plot_gen_200.png)
@@ -42,12 +43,21 @@ Bayesian Optimization
 ![Bayesian Optimization Training](artifacts/plots/bo_process.png)
 
 ### Testing Results
+
 **Best hyperparameters found by algorithm:**
 Genetic Algorithm:
 - Batch Size: `21`
 - Activation Function: `relu`
+
 Bayesian Optimization:
-**Training F1 scores:**
 - Batch Size: `25`
 - Activation Function: `tanh`
+
+**Training F1 scores:**
+![Test Model Training Plot](artifacts/training_history.png)
+
+**Test F1 Scores:**
+- Genetic Algorithm: `0.94786`
+- Bayesian Optimization: `0.95530`
+
 **Comparative analysis of both tuning methods:**

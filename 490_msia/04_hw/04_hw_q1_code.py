@@ -271,24 +271,19 @@ class GeneticAlgorithm:
 
 
 class DataHandler:
-    def __init__(self, train_X_path, train_y_path, test_X_path, test_y_path):
+    def __init__(self, train_X_path, train_y_path):
         self.train_X_path = train_X_path
         self.train_y_path = train_y_path
-        self.test_X_path = test_X_path
-        self.test_y_path = test_y_path
 
     def load_data(self):
         X_train = np.load(self.train_X_path)
         y_train = np.load(self.train_y_path)
-        X_test = np.load(self.test_X_path)
-        y_test = np.load(self.test_y_path)
 
         X_train, X_val, y_train, y_val = train_test_split(X_train, y_train, test_size=0.2)
         X_train = X_train.reshape(X_train.shape[0], -1)
         X_val = X_val.reshape(X_val.shape[0], -1)
-        X_test = X_test.reshape(X_test.shape[0], -1)
 
-        return X_train, y_train, X_val, y_val, X_test, y_test
+        return X_train, y_train, X_val, y_val
     
 # Main execution
 def main():
@@ -304,9 +299,8 @@ def main():
         os.environ['CUDA_VISIBLE_DEVICES'] = str(config['gpu_id'])
 
     # Use the configuration for paths
-    data_handler = DataHandler(config['data_paths']['train_X'], config['data_paths']['train_y'],
-                               config['data_paths']['test_X'], config['data_paths']['test_y'])
-    X_train, y_train, X_val, y_val, X_test, y_test = data_handler.load_data()
+    data_handler = DataHandler(config['data_paths']['train_X'], config['data_paths']['train_y'])
+    X_train, y_train, X_val, y_val = data_handler.load_data()
 
     # Use the configuration for Genetic Algorithm
     ga = GeneticAlgorithm(X_train, y_train, X_val, y_val, config)
