@@ -1,3 +1,3 @@
 Generation: 70
-Batch Size: 214
-Activation Function: tanh
+Batch Size: 26
+Activation Function: relu

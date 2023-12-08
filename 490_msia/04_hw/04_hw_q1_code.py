@@ -13,6 +13,17 @@ import os
 # Set up logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
+def set_seed(seed, use_cuda=True):
+    """Set the seed for reproducibility."""
+    random.seed(seed)
+    np.random.seed(seed)
+    torch.manual_seed(seed)
+    if use_cuda and torch.cuda.is_available():
+        torch.cuda.manual_seed(seed)
+        torch.cuda.manual_seed_all(seed)  # if using multi-GPU
+        torch.backends.cudnn.deterministic = True
+        torch.backends.cudnn.benchmark = False
+
 # Neural Network Class
 class TwoLayerNet(nn.Module):
     def __init__(self, input_size, hidden_size, num_classes):
@@ -56,48 +67,128 @@ class GeneticAlgorithm:
         # Now initialize the population
         self.population = self._initialize_population()
 
-    def _random_batch_size(self):
-        return random.randint(self.min_batch_size, self.max_batch_size)
+    def _binary_batch_size(self, minimum=None, maximum=None):
+        min_bs = minimum if minimum is not None else self.min_batch_size
+        max_bs = min(maximum, self.max_batch_size) if maximum is not None else self.max_batch_size
+        batch_size = random.randint(min_bs, max_bs)
+        binary_length = len(bin(self.max_batch_size)[2:])
 
+        logging.debug(f"Generated binary len: {binary_length} for decimal batch size: {batch_size}")
+    
+        return [int(bit) for bit in bin(batch_size)[2:].zfill(binary_length)]
+    
     def _initialize_population(self):
-        return [[self._random_batch_size(), random.choice(self.activation_funcs)] for _ in range(self.population_size)]
+        population = []
+        num_activation_funcs = len(self.activation_funcs)
+        for _ in range(self.population_size):
+            binary_batch_size = self._binary_batch_size()
+            one_hot_activation_func = [0] * num_activation_funcs
+            random_index = random.randint(0, num_activation_funcs - 1)
+            one_hot_activation_func[random_index] = 1
+            individual = binary_batch_size + one_hot_activation_func
+            population.append(individual)
+            logging.info(f"Initialized Individual: {individual}")
+        return population
+    
+    def is_valid_one_hot_encoding(self, one_hot_vector):
+        return sum(one_hot_vector) == 1 and 1 in one_hot_vector
+
+    def is_valid_batch_size(self, binary_batch_size):
+        batch_size = int(''.join(str(bit) for bit in binary_batch_size), 2)
+        return self.min_batch_size <= batch_size <= self.max_batch_size
+
+    def is_valid_individual(self, individual):
+        return self.is_valid_one_hot_encoding(individual[-3:])
+
+    def generate_random_individual(self):
+        binary_batch_size = self._binary_batch_size()
+        one_hot_activation_func = [0] * len(self.activation_funcs)
+        random_index = random.randint(0, len(self.activation_funcs) - 1)
+        one_hot_activation_func[random_index] = 1
+        return binary_batch_size + one_hot_activation_func
+
+    def adjust_batch_size(self, binary_batch_size):
+        batch_size = int(''.join(str(bit) for bit in binary_batch_size), 2)
+        if batch_size < self.min_batch_size:
+            return self._binary_batch_size(minimum=self.min_batch_size)
+        elif batch_size > self.max_batch_size:
+            return self._binary_batch_size(maximum=self.max_batch_size)
+        return binary_batch_size
 
     def calculate_fitness(self, individual):
+        binary_batch_size = individual[:-3]
+        one_hot_activation_func = individual[-3:]
+        logging.debug(f"Binary Batch Size: {binary_batch_size}")
+        logging.debug(f"One-Hot Activation Function: {one_hot_activation_func}")
+        batch_size = int(''.join(str(bit) for bit in binary_batch_size), 2)
+        logging.debug(f"Batch Size: {batch_size}")
+        logging.debug(f"Activation Function OHE: {one_hot_activation_func}")
+        activation_func_index = one_hot_activation_func.index(1)
+        activation_func = self.activation_funcs[activation_func_index]
+        logging.debug(f"Binary Batch Size: {binary_batch_size}, Converted Batch Size: {batch_size}")
         model = TwoLayerNet(self.X_train.shape[1], 128, 10)
-        self.train_model(model, individual[0], individual[1])
+        self.train_model(model, individual[:-3], activation_func)
         X_val_tensor = torch.tensor(self.X_val, dtype=torch.float32)
         y_val_tensor = torch.tensor(self.y_val, dtype=torch.int64)
-        outputs = model(X_val_tensor, individual[1])
+        outputs = model(X_val_tensor, activation_func)
         predicted = torch.argmax(outputs, 1)
         f1 = f1_score(y_val_tensor.numpy(), predicted.numpy(), average='macro')
         return f1
-
+    
     def select_parents(self, fitness_scores):
         total_fitness = sum(fitness_scores)
         selection_probs = [f / total_fitness for f in fitness_scores]
         selected_indices = np.random.choice(range(len(self.population)), size=self.population_size, p=selection_probs, replace=True)
-        logging.info(f"Selected Parent Indices: {selected_indices}")
+        logging.debug(f"Selected Parent Indices: {selected_indices}")
         return [self.population[i] for i in selected_indices]
-
+    
     def crossover(self, parent1, parent2):
-        crossover_point = random.randint(1, len(parent1) - 1)
-        return parent1[:crossover_point] + parent2[crossover_point:], parent2[:crossover_point] + parent1[crossover_point:]
+        # Single crossover point for the entire individual
+        crossover_point = random.randint(1, len(parent1))
 
+        # Crossover
+        child1 = parent1[:crossover_point] + parent2[crossover_point:]
+        child2 = parent2[:crossover_point] + parent1[crossover_point:]
+
+        # Validate and adjust the children
+        for child in [child1, child2]:
+            batch_part = child[:-len(self.activation_funcs)]
+            activation_part = child[-len(self.activation_funcs):]
+
+            if not self.is_valid_batch_size(batch_part):
+                batch_part = self.adjust_batch_size(batch_part)
+            if not self.is_valid_one_hot_encoding(activation_part):
+                activation_part = random.choice([[1] + [0] * (len(self.activation_funcs) - 1) for _ in range(len(self.activation_funcs))])
+
+            child[:] = batch_part + activation_part
+
+        return child1, child2
+    
     def mutate(self, child):
+        original_child = child.copy()
         if random.random() < self.mutation_rate:
-            gene_to_mutate = random.choice(['batch_size', 'activation_func'])
-            if gene_to_mutate == 'batch_size':
-                child[0] = self._random_batch_size()
-            else:
-                child[1] = random.choice(self.activation_funcs)
-        return child
+            mutation_point = random.randint(0, len(child) - 1)
+            child[mutation_point] = 1 - child[mutation_point]  # Flip bit
 
-    def train_model(self, model, batch_size, activation_func):
-        # Convert data to tensors
+            # Adjust batch size if it goes out of range after mutation
+            binary_batch_size = child[:-3]
+            if not self.is_valid_batch_size(binary_batch_size):
+                child = self.adjust_batch_size(binary_batch_size) + child[-3:]
+
+            # Adjust activation function if it is not valid after mutation
+            one_hot_activation_func = child[-3:]
+            if not self.is_valid_one_hot_encoding(one_hot_activation_func):
+                child[-3:] = random.choice([[1, 0, 0], [0, 1, 0], [0, 0, 1]])
+
+        logging.debug(f"Mutated Child: {original_child} -> {child}")
+        return child
+    
+    def train_model(self, model, batch_size_binary, activation_func):
+        batch_size = int(''.join(str(bit) for bit in batch_size_binary), 2)
+        logging.debug(f"Training Model: Batch Size - {batch_size}, Activation Func - {activation_func.__name__}")
+        
         X_train_tensor = torch.tensor(self.X_train, dtype=torch.float32)
         y_train_tensor = torch.tensor(self.y_train, dtype=torch.int64)
-
-        # Define loss function and optimizer
         criterion = nn.CrossEntropyLoss()
         optimizer = torch.optim.SGD(model.parameters(), lr=self.config['genetic_algorithm']['learning_rate'])
 
@@ -117,13 +208,6 @@ class GeneticAlgorithm:
                 loss.backward()
                 optimizer.step()
 
-            # Logging the loss at each epoch
-            # logging.info(f'Epoch [{epoch+1}/{epochs}], Loss: {loss.item():.4f}')
-
-    # def save_model(self, model, generation):
-    #     os.makedirs(self.model_save_path, exist_ok=True)  # Ensure directory exists
-    #     torch.save(model.state_dict(), f"{self.model_save_path}model_gen_{generation}.pt")
-
     def save_plot(self, generation):
         os.makedirs(self.plot_save_path, exist_ok=True)  # Ensure directory exists
         plt.figure()
@@ -139,12 +223,17 @@ class GeneticAlgorithm:
     def save_hyperparameters(self, best_individual, generation):
         os.makedirs(self.hyperparameters_save_path, exist_ok=True)
         file_path = os.path.join(self.hyperparameters_save_path, f"best_hyperparameters_gen_{generation}.txt")
+        batch_size = int(''.join(str(bit) for bit in best_individual[:-3]), 2)
+        activation_func_index = best_individual[-3:].index(1)
+        activation_func_name = self.activation_funcs[activation_func_index].__name__
+
         with open(file_path, 'w') as file:
             file.write(f"Generation: {generation}\n")
-            file.write(f"Batch Size: {best_individual[0]}\n")
-            file.write(f"Activation Function: {best_individual[1].__name__}\n")
+            file.write(f"Batch Size: {batch_size}\n")
+            file.write(f"Activation Function: {activation_func_name}\n")
 
     def run(self):
+        logging.info("Starting Genetic Algorithm")
         for generation in range(self.num_generations):
             logging.info(f"Generation {generation+1}/{self.num_generations}")
             fitness_scores = [self.calculate_fitness(individual) for individual in self.population]
@@ -160,6 +249,8 @@ class GeneticAlgorithm:
             while len(children) < self.population_size:
                 for i in range(0, len(parents), 2):
                     child1, child2 = self.crossover(parents[i], parents[min(i+1, len(parents)-1)])
+                    child1 = self.adjust_batch_size(child1[:-3]) + child1[-3:]
+                    child2 = self.adjust_batch_size(child2[:-3]) + child2[-3:]
                     children.extend([child1, child2])
             children = children[:self.population_size]
             mutated_children = [self.mutate(child) for child in children]
@@ -169,9 +260,6 @@ class GeneticAlgorithm:
                 self.save_plot(generation + 1)
                 best_individual_index = np.argmax([self.calculate_fitness(individual) for individual in self.population])
                 best_individual = self.population[best_individual_index]
-                best_model = TwoLayerNet(self.X_train.shape[1], 128, 10)
-                self.train_model(best_model, best_individual[0], best_individual[1])
-                # self.save_model(best_model, generation + 1)
                 self.save_hyperparameters(best_individual, generation + 1)
 
             # Optionally, log or print the best fitness score in this generation
@@ -179,6 +267,7 @@ class GeneticAlgorithm:
             logging.info(f"Average Fitness in Generation {generation+1}: {round(average_fitness, 5)}")
             logging.info(f"Best Fitness in Generation {generation+1}: {round(best_fitness, 5)}")
             logging.info("#" * 50)
+        logging.info("Genetic Algorithm run completed")
 
 
 class DataHandler:
@@ -205,6 +294,14 @@ class DataHandler:
 def main():
     with open('04_hw_q1_config.yaml', 'r') as file:
         config = yaml.safe_load(file)
+
+    # Set random seed
+    if 'random_seed' in config:
+        set_seed(config['random_seed'])
+
+    # Set GPU (if specified in config)
+    if 'gpu_id' in config:
+        os.environ['CUDA_VISIBLE_DEVICES'] = str(config['gpu_id'])
 
     # Use the configuration for paths
     data_handler = DataHandler(config['data_paths']['train_X'], config['data_paths']['train_y'],

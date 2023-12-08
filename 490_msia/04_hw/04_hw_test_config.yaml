@@ -1,0 +1,14 @@
+device: "cuda:1"
+
+data:
+  train_X_path: "04_hw_data/train_X.npy"
+  train_y_path: "04_hw_data/train_y.npy"
+  test_X_path: "04_hw_data/test_X.npy"
+  test_y_path: "04_hw_data/test_y.npy"
+
+optimizer:
+  lr: 0.001  # learning rate
+  momentum: 0.9  # momentum
+
+final_training:
+  epochs: 200  # number of epochs to train the final model

@@ -4,20 +4,22 @@ data_paths:
   test_X: './04_hw_data/test_X.npy'
   test_y: './04_hw_data/test_y.npy'
 
+random_seed: 1024
+gpu_id: 1
 
 genetic_algorithm:
-  population_size: 15
+  population_size: 20
   num_generations: 200
   mutation_rate: 0.15
-  learning_rate: 0.01
-  epochs: 20
+  learning_rate: 0.001
+  epochs: 200
   hidden_layer_size: 128
   num_classes: 10
   batch_size_range: [16, 1024]
   activation_funcs: ['relu', 'sigmoid', 'tanh']
 
 
-save_interval: 10  # Save every 5 generations
+save_interval: 10  # Save every 10 generations
 plot_save_path: 'artifacts/plots/'
 model_save_path: 'artifacts/models/'
 hyperparameters_save_path: 'artifacts/hyperparameters/'

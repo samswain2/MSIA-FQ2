@@ -1,0 +1,34 @@
+device: "cuda:1"
+
+data:
+  train_X_path: "04_hw_data/train_X.npy"
+  train_y_path: "04_hw_data/train_y.npy"
+  test_X_path: "04_hw_data/test_X.npy"
+  test_y_path: "04_hw_data/test_y.npy"
+
+data_split:
+  test_size: 0.2
+  random_state: 1024
+
+optimizer:
+  lr: 0.001
+  momentum: 0.9
+
+training:
+  epochs: 200
+
+bayesian_opt:
+  batch_size: [16, 1024]
+  activation_index: [0, 2]
+  random_state: 1024
+  verbose: 2
+  init_points: 2
+  n_iter: 200
+
+testing:
+  batch_size: 128
+
+activation_functions:
+  - "relu"
+  - "sigmoid"
+  - "tanh"

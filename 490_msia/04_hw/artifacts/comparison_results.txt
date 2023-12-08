@@ -1,0 +1,11 @@
+GA Model Results:
+Batch Size: 21
+Activation Function: relu
+Test F1 Score: 0.9478554891014634
+
+BO Model Results:
+Batch Size: 25
+Activation Function: tanh
+Test F1 Score: 0.9553022052413438
+
+The BO model performed better on the test data.
