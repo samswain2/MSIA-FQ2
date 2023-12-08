@@ -8,12 +8,12 @@ random_seed: 1024
 gpu_id: 1
 
 genetic_algorithm:
-  population_size: 200
-  replacement_proportion: 0.1
-  num_generations: 200
+  population_size: 40
+  replacement_proportion: 0.5
+  num_generations: 50
   mutation_rate: 0.15
   learning_rate: 0.001
-  epochs: 100
+  epochs: 200
   hidden_layer_size: 128
   num_classes: 10
   batch_size_range: [16, 1024]

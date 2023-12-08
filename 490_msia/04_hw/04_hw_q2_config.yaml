@@ -15,7 +15,7 @@ optimizer:
   momentum: 0.9
 
 training:
-  epochs: 100
+  epochs: 200
 
 bayesian_opt:
   batch_size: [16, 1024]
@@ -23,7 +23,7 @@ bayesian_opt:
   random_state: 1024
   verbose: 2
   init_points: 2
-  n_iter: 200
+  n_iter: 50
 
 testing:
   batch_size: 128

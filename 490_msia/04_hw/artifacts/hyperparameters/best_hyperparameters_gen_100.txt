@@ -1,3 +1,3 @@
 Generation: 100
-Batch Size: 27
+Batch Size: 23
 Activation Function: relu
