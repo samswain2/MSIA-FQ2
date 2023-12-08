@@ -15,7 +15,7 @@ optimizer:
   momentum: 0.9
 
 training:
-  epochs: 200
+  epochs: 100
 
 bayesian_opt:
   batch_size: [16, 1024]

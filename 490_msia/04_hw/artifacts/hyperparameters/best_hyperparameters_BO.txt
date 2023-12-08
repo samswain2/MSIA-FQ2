@@ -1,2 +1,2 @@
-Batch Size: 25
-Activation Function: tanh
+Batch Size: 40
+Activation Function: relu

@@ -44,6 +44,9 @@ class GeneticAlgorithm:
         self.population_size = config['genetic_algorithm']['population_size']
         self.num_generations = config['genetic_algorithm']['num_generations']
         self.mutation_rate = config['genetic_algorithm']['mutation_rate']
+        self.population_ages = [0] * self.population_size
+        self.fitness_scores = [0] * self.population_size
+        self.replacement_proportion = config['genetic_algorithm']['replacement_proportion']
 
         # Define activation functions and batch sizes before initializing the population
         activation_func_mapping = {
@@ -236,37 +239,76 @@ class GeneticAlgorithm:
         logging.info("Starting Genetic Algorithm")
         for generation in range(self.num_generations):
             logging.info(f"Generation {generation+1}/{self.num_generations}")
-            fitness_scores = [self.calculate_fitness(individual) for individual in self.population]
 
-            # Update fitness scores
-            average_fitness = sum(fitness_scores) / len(fitness_scores)
-            best_fitness = max(fitness_scores)
+            # Calculate fitness for the entire population only in the first generation
+            if generation == 0:
+                self.fitness_scores = [self.calculate_fitness(individual) for individual in self.population]
+
+            # Update average and best fitness scores
+            average_fitness = sum(self.fitness_scores) / len(self.fitness_scores)
+            best_fitness = max(self.fitness_scores)
             self.average_fitness_scores.append(average_fitness)
             self.highest_fitness_scores.append(best_fitness)
 
-            parents = self.select_parents(fitness_scores)
+            # Select parents based on fitness scores
+            parents = self.select_parents(self.fitness_scores)
+
+            # Generate a proportion of the population as children
+            num_children_to_generate = int(self.population_size * self.replacement_proportion)
             children = []
-            while len(children) < self.population_size:
+            while len(children) < num_children_to_generate:
                 for i in range(0, len(parents), 2):
+                    if len(children) >= num_children_to_generate:
+                        break
                     child1, child2 = self.crossover(parents[i], parents[min(i+1, len(parents)-1)])
                     child1 = self.adjust_batch_size(child1[:-3]) + child1[-3:]
                     child2 = self.adjust_batch_size(child2[:-3]) + child2[-3:]
                     children.extend([child1, child2])
-            children = children[:self.population_size]
-            mutated_children = [self.mutate(child) for child in children]
-            self.population = mutated_children
 
-            if (generation + 1) % self.save_interval == 0:
-                self.save_plot(generation + 1)
-                best_individual_index = np.argmax([self.calculate_fitness(individual) for individual in self.population])
-                best_individual = self.population[best_individual_index]
-                self.save_hyperparameters(best_individual, generation + 1)
+            # Mutate children and calculate their fitness
+            mutated_children = [self.mutate(child) for child in children]
+            mutated_fitness = [self.calculate_fitness(child) for child in mutated_children]
+
+            # Neatly log mutated children and population
+            for i, child in enumerate(mutated_children):
+                logging.debug(f"Mutated Child {i+1}: {child}")
+            for i, individual in enumerate(self.population):
+                logging.debug(f"Individual {i+1}: {individual}")
+
+            # Log age of each chromosome
+            for i, age in enumerate(self.population_ages):
+                logging.debug(f"Age of Individual {i+1}: {age}")
+
+            # Log fitness of each chromosome
+            for i, fitness in enumerate(self.fitness_scores):
+                logging.debug(f"Fitness of Individual {i+1}: {fitness}")
+
+            # Replace the oldest chromosomes
+            age_sorted_indices = np.argsort(self.population_ages)
+            oldest_indices = age_sorted_indices[-len(mutated_children):]
+            if len(set(self.population_ages)) < len(mutated_children):
+                random.shuffle(oldest_indices)  # Random tie-breaking
+
+            for index, (child, fitness) in zip(oldest_indices, zip(mutated_children, mutated_fitness)):
+                self.population[index] = child
+                self.fitness_scores[index] = fitness  # Update fitness score
+                self.population_ages[index] = 0  # Reset age
+
+            # Increment age of each chromosome
+            self.population_ages = [age + 1 for age in self.population_ages]
 
             # Optionally, log or print the best fitness score in this generation
-            best_fitness = max(fitness_scores)
             logging.info(f"Average Fitness in Generation {generation+1}: {round(average_fitness, 5)}")
             logging.info(f"Best Fitness in Generation {generation+1}: {round(best_fitness, 5)}")
             logging.info("#" * 50)
+
+            # Save plots and hyperparameters periodically
+            if (generation + 1) % self.save_interval == 0:
+                self.save_plot(generation + 1)
+                best_individual_index = self.fitness_scores.index(max(self.fitness_scores))
+                best_individual = self.population[best_individual_index]
+                self.save_hyperparameters(best_individual, generation + 1)
+
         logging.info("Genetic Algorithm run completed")
 
 
