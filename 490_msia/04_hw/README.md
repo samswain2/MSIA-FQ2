@@ -39,6 +39,7 @@ Two methods are used for hyperparameter tuning:
 **Training Plots:**
 Genetic Algorithm
 ![Genetic Algorithm Training](artifacts/plots/fitness_plot_gen_200.png)
+
 Bayesian Optimization
 ![Bayesian Optimization Training](artifacts/plots/bo_process.png)
 
@@ -60,4 +61,31 @@ Bayesian Optimization:
 - Genetic Algorithm: `0.94786`
 - Bayesian Optimization: `0.95530`
 
-**Comparative analysis of both tuning methods:**
+## Analysis of Hyperparameter Tuning Methods
+
+### Hyperparameter Choices:
+The Genetic Algorithm (GA) and Bayesian Optimization (BO) methods selected different hyperparameters for the neural network model. GA opted for a batch size of 21 and the ReLU activation function, while BO selected a batch size of 25 and the tanh activation function.
+
+### Pros and Cons:
+
+**Genetic Algorithm (GA):**
+- **Pros:**
+  - Explores a wide solution space through a process similar to natural selection, which can lead to diverse hyperparameter combinations.
+  - Reduces the chances of getting trapped in local optima due to its population-based approach.
+- **Cons:**
+  - Computationally intensive as it evaluates numerous candidates across multiple generations.
+  - Requires careful tuning of its own meta-parameters, such as mutation and crossover rates, adding another layer of complexity.
+
+**Bayesian Optimization (BO):**
+- **Pros:**
+  - Efficient in terms of computational resources as it uses past evaluations to inform the next set of hyperparameters to explore.
+  - Tends to find better solutions with fewer function evaluations compared to random or uninformed search strategies.
+- **Cons:**
+  - Can become trapped in local optima if the model's assumptions about the objective function do not hold.
+  - Performance is highly dependent on the chosen prior and the surrogate model, which might require domain expertise to set effectively.
+
+### Comparative Performance:
+In terms of the final F1 scores obtained from both methods, the Bayesian Optimization achieved a slightly higher F1 score on the test set (0.9553) compared to the Genetic Algorithm (0.9478), which suggests that for this specific task, BO was more effective in tuning the hyperparameters to achieve a better performing model.
+
+Given the performance metrics, it is crucial to consider both the effectiveness of the hyperparameter optimization method and the computational resources available when choosing between these two approaches for neural network tuning.
+
